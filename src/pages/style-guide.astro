@@ -1,0 +1,462 @@
+---
+import { Image } from "astro:assets";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Section from "@/components/Section.astro";
+import Container from "@/components/Container.astro";
+import LinkButton from "@/components/LinkButton.astro";
+import CampaignCard from "@/components/CampaignCard.astro";
+import PortraitCard from "@/components/PortraitCard.astro";
+import PortraitAge from "@/components/PortraitAge.astro";
+import TeamCard from "@/components/TeamCard.astro";
+import Stat from "@/components/home/Stat.astro";
+import CallsToAction from "@/components/home/CallsToAction.astro";
+import GuideHeader from "@/components/style-guide/GuideHeader.astro";
+import exhibitionPhoto from "@/assets/site/exhibition-prague.jpg";
+import { getCampaigns, getPortraits } from "@/lib/content";
+import { stats, team } from "@/data/site";
+
+const [campaign] = await getCampaigns();
+const portraits = (await getPortraits()).slice(0, 4);
+
+const toc = [
+  { id: "color", label: "Color" },
+  { id: "typography", label: "Typography" },
+  { id: "buttons", label: "Buttons" },
+  { id: "layout", label: "Layout" },
+  { id: "components", label: "Components" },
+  { id: "patterns", label: "Patterns" },
+];
+
+const colors = [
+  { name: "Red", token: "--color-red", hex: "#fb4445", use: "Brand accent: grid lines, borders, primary buttons, highlights, nav and footer." },
+  { name: "Red shade", token: "--color-red-shade", hex: "#d73839", use: "Primary button shadow." },
+  { name: "Ink", token: "--color-ink", hex: "#231f20", use: "Page and section background; text on red." },
+  { name: "Paper", token: "--color-paper", hex: "#fafafa", use: "Body text on ink; secondary buttons." },
+  { name: "Paper shade", token: "--color-paper-shade", hex: "#d9d9d9", use: "Secondary button shadow." },
+  { name: "Info", token: "--color-info", hex: "#0098b8", use: "Carried over from Webflow. Not currently used." },
+  { name: "Success", token: "--color-success", hex: "#00a011", use: "Carried over from Webflow. Not currently used." },
+];
+
+const typeScale = [
+  { cls: "type-h1", font: "Oswald Bold, uppercase", size: "3.815rem → 5.61rem", leading: "90%", tracking: "-0.07ch", use: "Big numbers (stats)", sample: "1400+" },
+  { cls: "type-h2", font: "Oswald Bold, uppercase", size: "3.052rem → 4.209rem", leading: "95%", tracking: "-0.06ch", use: "Mission statement", sample: "Every portrait is a voice" },
+  { cls: "type-h3", font: "Oswald Bold, uppercase", size: "2.441rem → 3.157rem", leading: "100%", tracking: "-0.05ch", use: "Rich-text headings", sample: "Art as an act of solidarity" },
+  { cls: "type-h4", font: "Oswald Bold, uppercase", size: "1.953rem → 2.369rem", leading: "100%", tracking: "-0.04ch", use: "Section titles, page titles", sample: "Featured campaigns" },
+  { cls: "type-h6", font: "Oswald Bold, uppercase", size: "1.25rem → 1.333rem", leading: "110%", tracking: "-0.02ch", use: "Names, eyebrows, buttons", sample: "Evgeny Kazantsev" },
+  { cls: "type-b1", font: "IBM Plex Serif Regular", size: "1rem", leading: "135%", tracking: "-0.02ch", use: "Body copy", sample: "Portraits of Hope brings together artists and audiences to honor individuals imprisoned for speaking truth, defending freedom or opposing war." },
+  { cls: "type-b2", font: "IBM Plex Serif Regular", size: "0.75rem", leading: "150%", tracking: "0.03ch", use: "Footer text, ages, metadata", sample: "PeopleForFreeRussia@protonmail.com" },
+  { cls: "type-b3", font: "IBM Plex Serif Regular", size: "0.563rem", leading: "175%", tracking: "0.1ch", use: "Captions, sources, portrait bios", sample: "Picture taken in Prague, CZ" },
+];
+
+const spacing = [
+  { px: 3, tw: "0.75" },
+  { px: 6, tw: "1.5" },
+  { px: 9, tw: "2.25" },
+  { px: 12, tw: "3" },
+  { px: 18, tw: "4.5" },
+  { px: 24, tw: "6" },
+  { px: 36, tw: "9" },
+  { px: 48, tw: "12" },
+  { px: 72, tw: "18" },
+  { px: 96, tw: "24" },
+  { px: 144, tw: "36" },
+  { px: 192, tw: "48" },
+];
+
+const breakpoints = [
+  { name: "base", min: "0", note: "Phones, single column" },
+  { name: "sm", min: "30rem (480px)", note: "Large phones" },
+  { name: "md", min: "48rem (768px)", note: "Tablets; headings step up" },
+  { name: "lg", min: "62rem (992px)", note: "6-column grid, desktop nav, hover states" },
+  { name: "xl", min: "90rem (1440px)", note: "Max content width" },
+];
+
+const buttons = [
+  { variant: "default", size: "default", label: "donate", code: '<LinkButton href="…">' },
+  { variant: "secondary", size: "default", label: "read more", code: '<LinkButton variant="secondary">' },
+  { variant: "default", size: "s", label: "Donate directly", code: '<LinkButton size="s">' },
+  { variant: "secondary", size: "s", label: "read more", code: '<LinkButton variant="secondary" size="s">' },
+] as const;
+
+const code = "font-mono text-[0.8125rem] leading-snug text-paper/70";
+const inlineCode = "font-mono text-[0.9em] text-paper/80";
+---
+
+<BaseLayout
+  title="Style Guide"
+  description="The Portraits of Hope design system: color, typography, components and layout patterns."
+  noindex
+>
+  <Section span={6}>
+    <Container class="gap-4.5">
+      <p class="type-h6 text-red">Design system</p>
+      <h1 class="type-h1">style guide</h1>
+      <p class="type-b1">
+        Tokens, type and components used across <span class="red-highlight">Portraits of Hope</span>.
+        Everything below renders the same components and utilities as the live pages, so it stays in
+        sync with the site. Tokens live in <code class={inlineCode}>src/styles/global.css</code>.
+      </p>
+      <nav aria-label="Style guide sections">
+        <ul class="flex flex-wrap gap-x-6 gap-y-3 type-h6">
+          {
+            toc.map((item, i) => (
+              <li>
+                <a href={`#${item.id}`} class="hover:text-red">
+                  <span class="text-red">0{i + 1}</span> {item.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+    </Container>
+  </Section>
+
+  {/* Color */}
+  <GuideHeader id="color" index="01" title="Color">
+    <p>
+      A two-color system: red on ink, with paper for text. Corners are always square (radius 0), and
+      every border and grid line is 1px red.
+    </p>
+  </GuideHeader>
+  <Section span={6}>
+    <Container>
+      <ul class="grid w-full grid-cols-2 gap-2.25 md:grid-cols-3 lg:grid-cols-4">
+        {
+          colors.map((color) => (
+            <li class="flex flex-col gap-3 border border-red">
+              <div class="aspect-[3/2] w-full border-b border-red" style={`background:${color.hex}`} />
+              <div class="flex flex-col gap-1.5 px-3 pb-3">
+                <p class="type-h6">{color.name}</p>
+                <p class={code}>
+                  {color.hex}
+                  <br />
+                  {color.token}
+                </p>
+                <p class="type-b2">{color.use}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+    </Container>
+  </Section>
+
+  {/* Typography */}
+  <GuideHeader id="typography" index="02" title="Typography">
+    <p>
+      Oswald for headings and buttons, always uppercase. IBM Plex Serif for everything you read. Sizes
+      follow a modular scale, and headings get larger from <code class={inlineCode}>md</code> (768px) up.
+    </p>
+  </GuideHeader>
+  <Section span={3}>
+    <Container>
+      <p class="type-h6 text-red">Heading</p>
+      <p class="font-heading text-[7rem] leading-[90%] font-bold uppercase">Aa</p>
+      <p class="type-h4">Oswald</p>
+      <p class="font-heading text-xl uppercase">Regular 400</p>
+      <p class="font-heading text-xl font-bold uppercase">Bold 700</p>
+      <p class="type-b2 break-all">ABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789</p>
+    </Container>
+  </Section>
+  <Section span={3}>
+    <Container>
+      <p class="type-h6 text-red">Body</p>
+      <p class="font-body text-[7rem] leading-[90%]">Aa</p>
+      <p class="font-body text-[1.953rem] leading-none font-semibold md:text-[2.369rem]">IBM Plex Serif</p>
+      <p class="font-body text-xl">Regular 400</p>
+      <p class="font-body text-xl font-semibold">SemiBold 600</p>
+      <p class="font-body text-xl font-bold">Bold 700</p>
+      <p class="font-body text-xl font-bold italic">Bold Italic 700</p>
+    </Container>
+  </Section>
+  <Section span={6}>
+    <Container class="gap-0">
+      {
+        typeScale.map((style) => (
+          <div class="grid w-full gap-4.5 border-t border-red py-6 first:border-t-0 first:pt-0 last:pb-0 md:grid-cols-[14rem_1fr]">
+            <dl class="flex flex-col gap-0.75">
+              <dt class="type-h6 text-red">.{style.cls}</dt>
+              <dd class={code}>{style.font}</dd>
+              <dd class={code}>{style.size}</dd>
+              <dd class={code}>
+                {style.leading} / {style.tracking}
+              </dd>
+              <dd class="type-b2 pt-1.5">{style.use}</dd>
+            </dl>
+            <p class={style.cls}>{style.sample}</p>
+          </div>
+        ))
+      }
+    </Container>
+  </Section>
+  <Section span={3}>
+    <Container>
+      <p class="type-h6 text-red">Inline styles</p>
+      <p class="type-b1">
+        Use <span class="red-highlight">.red-highlight</span> to emphasise a name or phrase, and{" "}
+        <a href="#typography" class="text-link">.text-link</a> for links inside body copy.
+      </p>
+      <p class={code}>
+        {'<span class="red-highlight">…</span>'}
+        <br />
+        {'<a class="text-link">…</a>'}
+      </p>
+    </Container>
+  </Section>
+  <Section span={3}>
+    <Container>
+      <p class="type-h6 text-red">Rich text</p>
+      <p class="type-b1">
+        Markdown content (campaign stories, page copy) is wrapped in <code class={inlineCode}>.rich-text</code>,
+        which centres it at a 576px reading width and styles the elements inside.
+      </p>
+    </Container>
+  </Section>
+  <Section span={6}>
+    <Container>
+      <div class="rich-text">
+        <h3>A heading inside rich text</h3>
+        <p>
+          A paragraph of body copy. Evgeny has been denied <a href="#typography">adequate medical care</a>{" "}
+          for months, and his condition continues to worsen behind prison walls.
+        </p>
+        <ul>
+          <li>An unordered list item</li>
+          <li>Another unordered list item</li>
+        </ul>
+        <ol>
+          <li>An ordered list item</li>
+          <li>Another ordered list item</li>
+        </ol>
+        <blockquote>A blockquote, used for quoted letters and statements.</blockquote>
+      </div>
+    </Container>
+  </Section>
+
+  {/* Buttons */}
+  <GuideHeader id="buttons" index="03" title="Buttons">
+    <p>
+      Two variants and two sizes, all from <code class={inlineCode}>buttonVariants</code> in{" "}
+      <code class={inlineCode}>src/components/ui/button.tsx</code>. In Astro, use{" "}
+      <code class={inlineCode}>LinkButton</code>; external links open in a new tab automatically.
+    </p>
+    <p>
+      On desktop the button drops 6px onto its shadow on hover. Pressed buttons fade to 60%, and focus
+      shows a paper ring. Below 480px every button goes full width (size{" "}
+      <code class={inlineCode}>s</code> below 992px).
+    </p>
+  </GuideHeader>
+  <Section span={6}>
+    <Container>
+      <div class="grid w-full grid-cols-1 gap-9 md:grid-cols-2">
+        {
+          buttons.map((button) => (
+            <div class="flex flex-col items-start gap-4.5">
+              <LinkButton href="#buttons" variant={button.variant} size={button.size} class="self-start">
+                {button.label}
+              </LinkButton>
+              <p class={code}>{button.code}</p>
+            </div>
+          ))
+        }
+      </div>
+      <div class="flex w-full flex-col items-start gap-4.5 pt-3">
+        <LinkButton href="#buttons" full>apply</LinkButton>
+        <p class={code}>{"<LinkButton full>"}: fills its container, used for page and CTA actions</p>
+      </div>
+    </Container>
+  </Section>
+
+  {/* Layout */}
+  <GuideHeader id="layout" index="04" title="Layout">
+    <p>
+      Pages are a 6-column grid (from 992px) of ink sections separated by 1px red lines. The lines are
+      the red page background showing through a 1px gap. Content is capped at 1440px.
+    </p>
+    <p>
+      Each <code class={inlineCode}>{"<Section>"}</code> sets its span, its padding (18 → 24 → 36px) and the
+      6px red square in its top-left corner. Below 992px, sections stack in a single column.
+    </p>
+  </GuideHeader>
+  {
+    [2, 2, 2].map((span) => (
+      <Section span={span as 2}>
+        <p class="type-h6">span {span}</p>
+        <p class={code}>{`<Section span={${span}}>`}</p>
+      </Section>
+    ))
+  }
+  {
+    [3, 3].map((span) => (
+      <Section span={span as 3}>
+        <p class="type-h6">span {span}</p>
+        <p class={code}>{`<Section span={${span}}>`}</p>
+      </Section>
+    ))
+  }
+  <Section span={4}>
+    <p class="type-h6">span 4</p>
+    <p class={code}>{"<Section span={4}>"}</p>
+  </Section>
+  <Section span={2} tone="red">
+    <p class="type-h6 text-ink">span 2, red</p>
+    <p class="font-mono text-[0.8125rem] leading-snug text-ink/70">{'<Section tone="red">'}</p>
+  </Section>
+  <Section span={3}>
+    <Container>
+      <p class="type-h6 text-red">Spacing</p>
+      <p class="type-b2">
+        Carried over from Webflow's spacing variables, written as Tailwind's 4px scale.
+      </p>
+      <ul class="flex w-full flex-col gap-2.25">
+        {
+          spacing.map((step) => (
+            <li class="grid grid-cols-[3.5rem_3.5rem_1fr] items-center gap-3">
+              <span class={code}>{step.px}px</span>
+              <span class={code}>{step.tw}</span>
+              <span class="h-3 bg-red" style={`width:min(${step.px}px,100%)`} />
+            </li>
+          ))
+        }
+      </ul>
+    </Container>
+  </Section>
+  <Section span={3}>
+    <Container>
+      <p class="type-h6 text-red">Breakpoints</p>
+      <p class="type-b2">Mobile-first. Webflow's desktop-first breakpoints, flipped.</p>
+      <ul class="flex w-full flex-col">
+        {
+          breakpoints.map((bp) => (
+            <li class="grid grid-cols-[3.5rem_1fr] gap-3 border-t border-red py-3 first:border-t-0">
+              <span class="type-h6">{bp.name}</span>
+              <span class="flex flex-col gap-0.75">
+                <span class={code}>{bp.min}</span>
+                <span class="type-b2">{bp.note}</span>
+              </span>
+            </li>
+          ))
+        }
+      </ul>
+    </Container>
+  </Section>
+
+  {/* Components */}
+  <GuideHeader id="components" index="05" title="Components">
+    <p>
+      Rendered with real content from <code class={inlineCode}>src/content</code>. The nav and footer
+      at the top and bottom of this page are the shared <code class={inlineCode}>Nav</code> and{" "}
+      <code class={inlineCode}>Footer</code> components. The home page uses{" "}
+      <code class={inlineCode}>{'<Footer variant="home">'}</code>, which shows the large logo.
+    </p>
+  </GuideHeader>
+  {
+    campaign && (
+      <Section span={6}>
+        <Container>
+          <p class="type-h6 text-red">Campaign card</p>
+          <p class={code}>{"<CampaignCard campaign={…} />"}: home page, featured campaigns</p>
+          <CampaignCard campaign={campaign} />
+        </Container>
+      </Section>
+    )
+  }
+  <Section span={6}>
+    <Container>
+      <p class="type-h6 text-red">Portrait card</p>
+      <p class={code}>{"<PortraitCard portrait={…} />"}: gallery grid. Age, artist and bio are optional.</p>
+      <ul class="grid w-full grid-cols-1 gap-2.25 md:grid-cols-2 lg:grid-cols-4">
+        {portraits.map((portrait) => <PortraitCard portrait={portrait} />)}
+      </ul>
+    </Container>
+  </Section>
+  <Section span={6}>
+    <Container>
+      <p class="type-h6 text-red">Team card</p>
+      <p class={code}>{"<TeamCard member={…} />"}: home page, team. Data lives in src/data/site.ts</p>
+      <ul class="grid w-full grid-cols-1 gap-2.25 sm:grid-cols-2 md:grid-cols-3">
+        {team.slice(0, 3).map((member) => <TeamCard member={member} />)}
+      </ul>
+    </Container>
+  </Section>
+  <Section span={6}>
+    <Container>
+      <p class="type-h6 text-red">Stat</p>
+      <p class={code}>{"<Stat value suffix label source />"}: counts up from 0 when scrolled into view</p>
+    </Container>
+  </Section>
+  {stats.map((stat) => <Stat {...stat} />)}
+  <Section span={6}>
+    <Container>
+      <p class="type-h6 text-red">Call to action</p>
+      <p class={code}>{"<CallsToAction />"}: three span-2 sections, title, text and a full-width button</p>
+    </Container>
+  </Section>
+  <CallsToAction />
+
+  {/* Patterns */}
+  <GuideHeader id="patterns" index="06" title="Patterns">
+    <p>Small arrangements that repeat across pages. They are plain markup, not components.</p>
+  </GuideHeader>
+  <Section span={3}>
+    <Container>
+      <p class="type-h6 text-red">Eyebrow and headline</p>
+      <p class={code}>type-h6 text-red over type-h4</p>
+      <div class="flex flex-col gap-4.5 border-t border-red pt-6">
+        <p class="type-h6 text-red">Evgeny Kazantsev</p>
+        <h3 class="type-h4">urgent medical care denied behind prison walls</h3>
+      </div>
+    </Container>
+  </Section>
+  <Section span={3}>
+    <Container>
+      <p class="type-h6 text-red">Section heading</p>
+      <p class={code}>type-h4, type-b1, gap-6, action pinned with mt-auto</p>
+      <div class="flex flex-1 flex-col items-start gap-6 border-t border-red pt-6">
+        <h3 class="type-h4">about</h3>
+        <p class="type-b1">
+          A short paragraph introducing the section, with a <span class="red-highlight">highlight</span>.
+        </p>
+        <div class="mt-auto flex w-full">
+          <LinkButton href="#patterns" size="s">learn more</LinkButton>
+        </div>
+      </div>
+    </Container>
+  </Section>
+  <Section span={3}>
+    <Container>
+      <p class="type-h6 text-red">Bordered image and caption</p>
+      <p class={code}>border border-red, then type-b3 caption</p>
+      <Image
+        src={exhibitionPhoto}
+        alt="Portraits of Hope exhibition in Prague: framed portraits hung along a gallery wall"
+        widths={[480, 720]}
+        sizes="(min-width: 1440px) 648px, (min-width: 992px) 45vw, 100vw"
+        class="aspect-video w-full border border-red object-cover"
+      />
+      <p class="type-b3">Picture taken in Prague, CZ</p>
+    </Container>
+  </Section>
+  <Section span={3}>
+    <Container>
+      <p class="type-h6 text-red">Corner accent and metadata</p>
+      <p class={code}>absolute top-0 left-0 size-1.5 bg-red</p>
+      <div class="relative flex flex-col gap-3 border border-red p-4.5">
+        <div class="flex justify-between gap-3">
+          <p class="type-h6">Name Surname</p>
+          <PortraitAge age={35} class="type-b2" />
+        </div>
+        <p class="flex gap-0.75 type-b1">
+          <span>by</span>
+          <span>Artist Name</span>
+        </p>
+        <div class="absolute top-0 left-0 size-1.5 bg-red" aria-hidden="true"></div>
+      </div>
+      <p class="type-b2">
+        Every section and team card carries the red corner square. Ages read as{" "}
+        <span class="font-bold">35 Y.O.</span>
+      </p>
+    </Container>
+  </Section>
+</BaseLayout>

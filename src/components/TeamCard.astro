@@ -1,0 +1,23 @@
+---
+import { Image } from "astro:assets";
+import type { TeamMember } from "@/data/site";
+
+type Props = { member: TeamMember };
+
+const { member } = Astro.props;
+---
+
+<li class="relative flex flex-col items-start gap-2.25 border border-red">
+  <Image
+    src={member.photo}
+    alt={member.name}
+    widths={[320, 480, 720]}
+    sizes="(min-width: 1440px) 450px, (min-width: 992px) 30vw, (min-width: 480px) 50vw, 100vw"
+    class="aspect-square w-full border-b border-red object-cover"
+  />
+  <div class="flex w-full flex-col items-start gap-2.25 px-3 pb-3">
+    <p class="type-h6">{member.name}</p>
+    <p class="type-b1">{member.role}</p>
+  </div>
+  <div class="absolute top-0 left-0 size-1.5 bg-red" aria-hidden="true"></div>
+</li>

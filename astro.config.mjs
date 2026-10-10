@@ -12,7 +12,7 @@ export default defineConfig({
   build: {
     format: 'file',
   },
-  integrations: [react(), sitemap()],
+  integrations: [react(), sitemap({ filter: (page) => !page.endsWith('/style-guide') })],
 
   vite: {
     plugins: [tailwindcss()]

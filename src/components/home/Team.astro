@@ -1,7 +1,7 @@
 ---
-import { Image } from "astro:assets";
 import Section from "@/components/Section.astro";
 import Container from "@/components/Container.astro";
+import TeamCard from "@/components/TeamCard.astro";
 import { team } from "@/data/site";
 ---
 
@@ -10,24 +10,7 @@ import { team } from "@/data/site";
     <div class="flex w-full flex-1 flex-col items-start gap-6">
       <h2 class="type-h4">team</h2>
       <ul class="grid w-full grid-cols-1 gap-2.25 sm:grid-cols-2 md:grid-cols-3">
-        {
-          team.map((member) => (
-            <li class="relative flex flex-col items-start gap-2.25 border border-red">
-              <Image
-                src={member.photo}
-                alt={member.name}
-                widths={[320, 480, 720]}
-                sizes="(min-width: 1440px) 450px, (min-width: 992px) 30vw, (min-width: 480px) 50vw, 100vw"
-                class="aspect-square w-full border-b border-red object-cover"
-              />
-              <div class="flex w-full flex-col items-start gap-2.25 px-3 pb-3">
-                <p class="type-h6">{member.name}</p>
-                <p class="type-b1">{member.role}</p>
-              </div>
-              <div class="absolute top-0 left-0 size-1.5 bg-red" aria-hidden="true" />
-            </li>
-          ))
-        }
+        {team.map((member) => <TeamCard member={member} />)}
       </ul>
     </div>
   </Container>

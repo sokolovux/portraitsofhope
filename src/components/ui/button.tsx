@@ -10,7 +10,7 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default: "bg-red shadow-[0_6px_0_0_var(--color-red-shade)]",
-        secondary: "bg-paper shadow-[0_6px_0_0_#d9d9d9]",
+        secondary: "bg-paper shadow-[0_6px_0_0_var(--color-paper-shade)]",
       },
       size: {
         default: "p-4.5 text-[1.25rem] leading-[110%] tracking-[-0.02ch] md:text-[1.333rem]",

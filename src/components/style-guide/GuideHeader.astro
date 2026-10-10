@@ -1,0 +1,18 @@
+---
+import Section from "@/components/Section.astro";
+import Container from "@/components/Container.astro";
+
+type Props = { id: string; index: string; title: string };
+
+const { id, index, title } = Astro.props;
+---
+
+<Section span={6} id={id} class="scroll-mt-24">
+  <Container class="gap-4.5">
+    <p class="type-h6 text-red">{index}</p>
+    <h2 class="type-h3">{title}</h2>
+    <div class="type-b1 flex flex-col gap-3">
+      <slot />
+    </div>
+  </Container>
+</Section>

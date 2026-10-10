@@ -14,6 +14,7 @@ type Props = {
   footer?: "home" | "page";
   /** Film-grain overlay over the whole page (present on every page except the gallery). */
   grain?: boolean;
+  noindex?: boolean;
 };
 
 const {
@@ -22,6 +23,7 @@ const {
   shareImage = defaultShareImage,
   footer = "page",
   grain = true,
+  noindex = false,
 } = Astro.props;
 
 const fullTitle = title ? `${title} | ${site.name}` : site.name;
@@ -38,6 +40,7 @@ const ogUrl = new URL(og.src, Astro.site ?? site.url);
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
     <link rel="icon" type="image/png" href="/favicon-32.png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="sitemap" href="/sitemap-index.xml" />
