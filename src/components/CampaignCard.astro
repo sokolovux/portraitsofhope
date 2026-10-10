@@ -1,0 +1,29 @@
+---
+import { Image } from "astro:assets";
+import type { CollectionEntry } from "astro:content";
+import LinkButton from "@/components/LinkButton.astro";
+
+type Props = { campaign: CollectionEntry<"campaigns"> };
+
+const { campaign } = Astro.props;
+const { name, headline, summary, image, donateUrl } = campaign.data;
+---
+
+<article class="flex flex-col gap-6 border border-red md:flex-row lg:max-h-[360px]">
+  <Image
+    src={image}
+    alt={`Portrait of ${name}`}
+    widths={[192, 384, 620]}
+    sizes="(min-width: 992px) 310px, 192px"
+    class="w-48 self-start lg:h-[360px] lg:w-auto"
+  />
+  <div class="flex w-full flex-col gap-4.5 px-6 pb-6 md:pt-6 md:pl-0">
+    <p class="type-h6 text-red">{name}</p>
+    <h3 class="type-h4">{headline}</h3>
+    <p class="type-b1">{summary}</p>
+    <div class="mt-auto flex max-w-text flex-wrap gap-x-1.5 gap-y-3 max-sm:flex-col max-sm:gap-4.5">
+      <LinkButton href={donateUrl} size="s">Donate directly</LinkButton>
+      <LinkButton href={`/${campaign.id}`} size="s" variant="secondary">read more</LinkButton>
+    </div>
+  </div>
+</article>

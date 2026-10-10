@@ -87,7 +87,7 @@ for (const [i, item] of items.entries()) {
   const name = clean($item.find(".div-block-3 .h6").text());
   const ageText = clean($item.find(".div-block-2 p").first().text());
   const artist = clean($item.find(".div-block p").eq(1).text());
-  const bio = clean($item.find("p.b3").text());
+  const bio = clean($item.find("p.b3").text()).replace(/^-$/, "");
   const src = $item.find("img.portrait-image").attr("src");
 
   let slug = slugify(name);

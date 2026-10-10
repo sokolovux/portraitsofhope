@@ -5,5 +5,3 @@ artist: "Grazhdanochka"
 image: "../../assets/portraits/dim-davletkildin.jpg"
 order: 26
 ---
-
--

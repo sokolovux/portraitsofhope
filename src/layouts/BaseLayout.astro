@@ -1,0 +1,71 @@
+---
+import "@/styles/global.css";
+import { getImage } from "astro:assets";
+import type { ImageMetadata } from "astro";
+import Nav from "@/components/Nav.astro";
+import Footer from "@/components/Footer.astro";
+import defaultShareImage from "@/assets/site/exhibition-prague.jpg";
+import { site } from "@/data/site";
+
+type Props = {
+  title?: string;
+  description?: string;
+  shareImage?: ImageMetadata;
+  footer?: "home" | "page";
+  /** Film-grain overlay over the whole page (present on every page except the gallery). */
+  grain?: boolean;
+};
+
+const {
+  title,
+  description = site.description,
+  shareImage = defaultShareImage,
+  footer = "page",
+  grain = true,
+} = Astro.props;
+
+const fullTitle = title ? `${title} | ${site.name}` : site.name;
+const canonical = new URL(Astro.url.pathname, Astro.site ?? site.url);
+const og = await getImage({ src: shareImage, width: 1200, format: "jpg" });
+const ogUrl = new URL(og.src, Astro.site ?? site.url);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/png" href="/favicon-32.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <meta name="theme-color" content="#fb4445" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogUrl} />
+    <meta name="twitter:card" content="summary_large_image" />
+  </head>
+  <body>
+    <Nav />
+    {
+      grain && (
+        <div
+          class="pointer-events-none fixed inset-0 z-11 bg-[url(/noise.png)] bg-size-[25%] opacity-50 mix-blend-overlay"
+          aria-hidden="true"
+        />
+      )
+    }
+    <main
+      class="relative mx-auto flex w-full max-w-site flex-col gap-px overflow-hidden bg-red p-px lg:grid lg:grid-cols-6"
+    >
+      <slot />
+      <Footer variant={footer} />
+    </main>
+  </body>
+</html>

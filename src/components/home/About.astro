@@ -1,0 +1,35 @@
+---
+import { Image } from "astro:assets";
+import Section from "@/components/Section.astro";
+import Container from "@/components/Container.astro";
+import exhibitionPhoto from "@/assets/site/exhibition-prague.jpg";
+import { links } from "@/data/site";
+---
+
+<Section span={3} id="about">
+  <Container>
+    <div class="flex flex-1 flex-col items-start gap-6">
+      <h2 class="type-h4">about</h2>
+      <p class="type-b1">
+        <span class="red-highlight">Portraits of Hope</span> brings together artists and audiences to
+        honor individuals imprisoned for speaking truth, defending freedom or opposing war. Through
+        portraiture and storytelling, the project humanizes those silenced by repression and builds
+        bridges between art and action.
+        <br /><br />
+        As part of the <a href={links.coalition} target="_blank" rel="noopener" class="text-link">
+          People for Free Russia Coalition</a
+        >, the project raises funds for urgent medical needs, helping secure treatment and essential
+        care often denied in Russian prisons. Exhibitions around the world transform public awareness
+        into tangible support for those still behind bars.
+      </p>
+    </div>
+    <Image
+      src={exhibitionPhoto}
+      alt="Portraits of Hope exhibition in Prague: framed portraits hung along a gallery wall"
+      widths={[480, 720, 1080]}
+      sizes="(min-width: 1440px) 648px, (min-width: 992px) 45vw, 100vw"
+      class="mt-auto aspect-video w-full border border-red object-cover"
+    />
+    <p class="type-b3">Picture taken in Prague, CZ</p>
+  </Container>
+</Section>

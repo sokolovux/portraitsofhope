@@ -14,7 +14,7 @@ const buttonVariants = cva(
       },
       size: {
         default: "p-4.5 text-[1.25rem] leading-[110%] tracking-[-0.02ch] md:text-[1.333rem]",
-        s: "p-3 text-base leading-[110%] tracking-[-0.02ch] max-md:w-full",
+        s: "p-3 text-base leading-[110%] tracking-[-0.02ch] max-lg:w-full",
       },
       full: {
         true: "w-full",

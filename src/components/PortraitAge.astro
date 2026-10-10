@@ -1,0 +1,14 @@
+---
+type Props = { age?: number; class?: string };
+
+const { age, class: className } = Astro.props;
+---
+
+{
+  age !== undefined && (
+    <p class:list={["flex shrink-0 gap-1.5", className]}>
+      <span>{age}</span>
+      <span>Y.O.</span>
+    </p>
+  )
+}

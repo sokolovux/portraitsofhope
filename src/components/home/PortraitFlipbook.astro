@@ -1,0 +1,45 @@
+---
+import { Image } from "astro:assets";
+import type { ImageMetadata } from "astro";
+import Section from "@/components/Section.astro";
+
+const modules = import.meta.glob<{ default: ImageMetadata }>("/src/assets/hero/frame-*.png", {
+  eager: true,
+});
+const frames = Object.keys(modules)
+  .sort()
+  .map((key) => modules[key].default);
+
+const FRAME_MS = 750;
+const cycleMs = frames.length * FRAME_MS;
+// Hard cuts between frames: each one is visible for 1/frames of the cycle.
+const keyframes = `@keyframes poh-flip { 0% { opacity: 1 } ${100 / frames.length}% { opacity: 0 } 100% { opacity: 0 } }`;
+---
+
+<Fragment set:html={`<style>${keyframes}</style>`} />
+
+<Section span={2} class="aspect-[6/7.2] md:aspect-[6/7] lg:aspect-[6/6.78]" aria-hidden="true">
+  <div class="relative z-1 h-full w-full" style={`--cycle: ${cycleMs}ms`}>
+    {
+      frames.map((frame, i) => (
+        <Image
+          src={frame}
+          alt=""
+          widths={[400, 600, 900, 1200]}
+          sizes="(min-width: 1440px) 408px, (min-width: 992px) 30vw, 100vw"
+          loading={i === 0 ? "eager" : "lazy"}
+          class:list={["frame absolute top-0 left-0 w-full", i === 0 ? "opacity-100" : "opacity-0"]}
+          style={`animation-delay: ${i * FRAME_MS - cycleMs}ms`}
+        />
+      ))
+    }
+  </div>
+</Section>
+
+<style>
+  @media (prefers-reduced-motion: no-preference) {
+    .frame {
+      animation: poh-flip var(--cycle) step-end infinite;
+    }
+  }
+</style>

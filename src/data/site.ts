@@ -17,10 +17,12 @@ export const site = {
 
 export const links = {
   donate: "https://givebutter.com/portraits-of-hope-wpsecq",
+  // TODO: this form currently requires a Google sign-in (HTTP 401); replace with the public
+  // "Send > link" URL once the form's access settings allow anyone to respond.
   submitPortrait:
     "https://docs.google.com/forms/d/1fbae9GCXthNjeWynZQhdNuUn2CM848We8EXXLXvsDHc/viewform",
   hostExhibition:
-    "https://docs.google.com/forms/d/1scD8yrYssy6dCvTC6G5iTmAvsaV-58V7Jnis6HiDBjU/viewform",
+    "https://docs.google.com/forms/d/e/1FAIpQLScq-CFS0xG-3KxVeb_M3wXOcQFy1QC64QXK3Koxiil5cwsqgg/viewform",
   instagram: "https://www.instagram.com/portraitsofhope.art",
   coalition: "https://www.instagram.com/peopleforfreerussia",
   // TODO: decide where "contact" should go; the Webflow site links to "#".

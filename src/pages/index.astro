@@ -1,16 +1,25 @@
 ---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Hero from "@/components/home/Hero.astro";
+import PortraitFlipbook from "@/components/home/PortraitFlipbook.astro";
+import About from "@/components/home/About.astro";
+import Mission from "@/components/home/Mission.astro";
+import Stat from "@/components/home/Stat.astro";
+import FeaturedCampaigns from "@/components/home/FeaturedCampaigns.astro";
+import GalleryMarquee from "@/components/home/GalleryMarquee.astro";
+import Team from "@/components/home/Team.astro";
+import CallsToAction from "@/components/home/CallsToAction.astro";
+import { stats } from "@/data/site";
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<BaseLayout footer="home">
+  <Hero />
+  <PortraitFlipbook />
+  <About />
+  <Mission />
+  {stats.map((stat) => <Stat {...stat} />)}
+  <FeaturedCampaigns />
+  <GalleryMarquee />
+  <Team />
+  <CallsToAction />
+</BaseLayout>

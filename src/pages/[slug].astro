@@ -1,0 +1,43 @@
+---
+import { Image } from "astro:assets";
+import { render } from "astro:content";
+import type { GetStaticPaths } from "astro";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Section from "@/components/Section.astro";
+import Container from "@/components/Container.astro";
+import LinkButton from "@/components/LinkButton.astro";
+import { getCampaigns } from "@/lib/content";
+
+// Campaign pages live at the site root (e.g. /evgeny-kazantsev), matching the Webflow URLs.
+export const getStaticPaths = (async () => {
+  const campaigns = await getCampaigns();
+  return campaigns.map((campaign) => ({ params: { slug: campaign.id }, props: { campaign } }));
+}) satisfies GetStaticPaths;
+
+const { campaign } = Astro.props;
+const { name, headline, title, summary, image, donateUrl } = campaign.data;
+const { Content } = await render(campaign);
+---
+
+<BaseLayout title={name} description={`${headline}. ${summary}.`} shareImage={image}>
+  <Section span={6}>
+    <Container>
+      <Image
+        src={image}
+        alt={`Portrait of ${name}`}
+        widths={[256, 512, 768]}
+        sizes="256px"
+        loading="eager"
+        class="w-64 self-center"
+      />
+      <p class="self-center text-center type-h6 text-red">{name}</p>
+      <h1 class="self-center text-center type-h4">{title ?? headline}</h1>
+      <div class="rich-text">
+        <Content />
+      </div>
+      <div class="flex w-full max-w-text self-center">
+        <LinkButton href={donateUrl} full>Donate</LinkButton>
+      </div>
+    </Container>
+  </Section>
+</BaseLayout>

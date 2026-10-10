@@ -1,0 +1,61 @@
+---
+import { Image } from "astro:assets";
+import Section from "@/components/Section.astro";
+import footerLogo from "@/assets/site/footer-logo.png";
+import { links, site } from "@/data/site";
+
+type Props = {
+  /** The home page footer shows the full-width wordmark; inner pages use the compact text logo. */
+  variant?: "home" | "page";
+};
+
+const { variant = "page" } = Astro.props;
+const instagramClass = "type-b2 font-bold text-ink underline decoration-1 underline-offset-4";
+---
+
+{
+  variant === "home" ? (
+    <Section
+      as="footer"
+      tone="red"
+      class="items-center justify-center gap-6 lg:grid lg:grid-cols-[repeat(6,1fr)] lg:items-center"
+    >
+      <Image
+        src={footerLogo}
+        alt={site.name}
+        widths={[480, 960, 1440, 2160]}
+        sizes="(min-width: 1440px) 1368px, 100vw"
+        class="w-full lg:col-span-6"
+      />
+      <p class="type-b2 text-ink">{site.email}</p>
+      <p class="type-b2">
+        <a href={links.instagram} target="_blank" rel="noopener" class={instagramClass}>
+          Instagram
+        </a>
+      </p>
+      <div class="order-last lg:order-none lg:col-span-2" aria-hidden="true" />
+      <p class="type-b2 text-ink lg:col-span-2">{site.copyright}</p>
+    </Section>
+  ) : (
+    <Section
+      as="footer"
+      tone="red"
+      class="items-center justify-center gap-6 lg:grid lg:grid-cols-[repeat(6,1fr)] lg:grid-rows-[auto_auto] lg:items-center"
+    >
+      <a href="/" class="self-start lg:col-span-2 max-lg:self-center">
+        <span class="block type-h4 text-ink max-sm:text-[1.5rem]">{site.name}</span>
+      </a>
+      <div class="flex flex-col items-center gap-6 lg:items-start lg:self-start">
+        <p class="type-b2 text-ink">{site.email}</p>
+        <p class="type-b2">
+          <a href={links.instagram} target="_blank" rel="noopener" class={instagramClass}>
+            Instagram
+          </a>
+        </p>
+      </div>
+      <div class="flex flex-col lg:self-start">
+        <p class="type-b2 text-ink">{site.copyright}</p>
+      </div>
+    </Section>
+  )
+}

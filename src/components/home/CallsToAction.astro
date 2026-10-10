@@ -1,0 +1,24 @@
+---
+import Section from "@/components/Section.astro";
+import Container from "@/components/Container.astro";
+import LinkButton from "@/components/LinkButton.astro";
+import { ctas } from "@/data/site";
+---
+
+{
+  ctas.map((cta) => (
+    <Section span={2}>
+      <Container class="items-start">
+        <div class="flex w-full flex-1 flex-col items-start gap-6">
+          <h2 class="type-h4">{cta.title}</h2>
+          <p class="type-b1">{cta.text}</p>
+          <div class="mt-auto flex w-full">
+            <LinkButton href={cta.href} full>
+              {cta.label}
+            </LinkButton>
+          </div>
+        </div>
+      </Container>
+    </Section>
+  ))
+}

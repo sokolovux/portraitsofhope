@@ -5,5 +5,3 @@ artist: "Elena Stashkova"
 image: "../../assets/portraits/andrey-ivashev.jpg"
 order: 17
 ---
-
--

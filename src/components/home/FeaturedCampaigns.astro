@@ -1,0 +1,29 @@
+---
+import Section from "@/components/Section.astro";
+import Container from "@/components/Container.astro";
+import CampaignCard from "@/components/CampaignCard.astro";
+import { getFeaturedCampaigns } from "@/lib/content";
+
+const campaigns = await getFeaturedCampaigns();
+---
+
+{
+  campaigns.length > 0 && (
+    <Section span={6}>
+      <Container>
+        <div class="flex flex-1 flex-col items-start gap-6">
+          <h2 class="type-h4">featured campaigns</h2>
+          <p class="type-b1">
+            Personal stories behind the portraits and a direct way to help with urgent needs through
+            targeted donations.
+          </p>
+        </div>
+        <div class="flex flex-col gap-4">
+          {campaigns.map((campaign) => (
+            <CampaignCard campaign={campaign} />
+          ))}
+        </div>
+      </Container>
+    </Section>
+  )
+}

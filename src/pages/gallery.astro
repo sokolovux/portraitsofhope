@@ -1,0 +1,35 @@
+---
+import { Image } from "astro:assets";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Section from "@/components/Section.astro";
+import Container from "@/components/Container.astro";
+import PortraitCard from "@/components/PortraitCard.astro";
+import galleryTitle from "@/assets/site/gallery-title.png";
+import { getPortraits } from "@/lib/content";
+
+const portraits = await getPortraits();
+---
+
+<BaseLayout
+  title="Gallery"
+  description="Portraits of political prisoners in Russia, created by artists around the world for Portraits of Hope."
+  grain={false}
+>
+  <Section span={6}>
+    <Container class="items-start">
+      <h1 class="w-full">
+        <Image
+          src={galleryTitle}
+          alt="Gallery"
+          widths={[480, 960, 1440, 2048]}
+          sizes="(min-width: 1440px) 1368px, 100vw"
+          loading="eager"
+          class="w-full"
+        />
+      </h1>
+      <ul class="mt-6 mb-12 grid w-full grid-cols-1 gap-2.25 md:grid-cols-2 lg:grid-cols-4">
+        {portraits.map((portrait, i) => <PortraitCard portrait={portrait} eager={i < 4} />)}
+      </ul>
+    </Container>
+  </Section>
+</BaseLayout>

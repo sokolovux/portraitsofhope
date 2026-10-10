@@ -1,0 +1,64 @@
+---
+import Section from "@/components/Section.astro";
+import Container from "@/components/Container.astro";
+
+type Props = {
+  value: number;
+  suffix?: string;
+  label: string;
+  source?: { label: string; href: string };
+};
+
+const { value, suffix, label, source } = Astro.props;
+---
+
+<Section span={3}>
+  <Container>
+    <div class="flex flex-1 flex-col items-start gap-6">
+      <p class="flex gap-0.75 type-h1 text-red">
+        <span data-count-to={value} data-count-duration="3000">{value}</span>
+        {suffix && <span>{suffix}</span>}
+      </p>
+      <h2 class="type-h4">{label}</h2>
+      {
+        source && (
+          <p class="type-b3">
+            Source:{" "}
+            <a href={source.href} target="_blank" rel="noopener" class="hover:underline">
+              {source.label}
+            </a>
+          </p>
+        )
+      }
+    </div>
+  </Container>
+</Section>
+
+<script>
+  // Counts up from 0 the first time the number scrolls into view.
+  const easeOut = (t: number) => 1 - Math.pow(1 - t, 24);
+
+  const animate = (el: HTMLElement) => {
+    const target = Number(el.dataset.countTo);
+    const duration = Number(el.dataset.countDuration) || 2000;
+    let start: number | undefined;
+    const tick = (now: number) => {
+      start ??= now;
+      const t = Math.min((now - start) / duration, 1);
+      el.textContent = String(Math.round(target * easeOut(t)));
+      if (t < 1) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  };
+
+  if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    const observer = new IntersectionObserver((entries) => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+        observer.unobserve(entry.target);
+        animate(entry.target as HTMLElement);
+      }
+    });
+    document.querySelectorAll<HTMLElement>("[data-count-to]").forEach((el) => observer.observe(el));
+  }
+</script>

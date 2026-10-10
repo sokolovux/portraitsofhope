@@ -1,0 +1,44 @@
+---
+import { Image } from "astro:assets";
+import type { CollectionEntry } from "astro:content";
+import { render } from "astro:content";
+
+type Props = { portrait: CollectionEntry<"portraits">; eager?: boolean };
+
+const { portrait, eager = false } = Astro.props;
+const { name, age, artist, image } = portrait.data;
+const { Content } = await render(portrait);
+---
+
+<li class="flex flex-col gap-3 border border-red">
+  <Image
+    src={image}
+    alt={`Portrait of ${name}${artist ? ` by ${artist}` : ""}`}
+    widths={[320, 480, 640, 960]}
+    sizes="(min-width: 1440px) 343px, (min-width: 992px) 24vw, (min-width: 768px) 48vw, 100vw"
+    loading={eager ? "eager" : "lazy"}
+    class="aspect-[3/4] w-full border-b border-red object-cover"
+  />
+  <div class="flex flex-col gap-1.5 px-3 pb-3">
+    <div class="flex justify-between gap-3">
+      <h2 class="type-h6">{name}</h2>
+      {
+        age !== undefined && (
+          <p class="flex shrink-0 gap-1.5 type-b2">
+            <span>{age}</span>
+            <span>Y.O</span>
+          </p>
+        )
+      }
+    </div>
+    {
+      artist && (
+        <p class="flex gap-0.75 type-b1">
+          <span>by</span>
+          <span>{artist}</span>
+        </p>
+      )
+    }
+    {portrait.body?.trim() && <div class="type-b3"><Content /></div>}
+  </div>
+</li>

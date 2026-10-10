@@ -1,0 +1,49 @@
+---
+import { Image } from "astro:assets";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Section from "@/components/Section.astro";
+import Container from "@/components/Container.astro";
+import LinkButton from "@/components/LinkButton.astro";
+import exhibitionPhoto from "@/assets/site/exhibition-prague.jpg";
+import { links } from "@/data/site";
+---
+
+<BaseLayout
+  title="Host Exhibit"
+  description="Bring the Portraits of Hope exhibition to your community and help spark awareness, dialogue, and action."
+>
+  <Section span={6}>
+    <Container>
+      <Image
+        src={exhibitionPhoto}
+        alt="Portraits of Hope exhibition in Prague: framed portraits hung along a gallery wall"
+        widths={[480, 720, 1080]}
+        sizes="(min-width: 1440px) 684px, 50vw"
+        loading="eager"
+        class="w-full max-w-1/2 self-center"
+      />
+      <h1 class="self-center text-center type-h4">host an exhibit</h1>
+      <div class="rich-text">
+        {/* TODO: placeholder copy carried over from the Webflow page; replace with the real text. */}
+        <p>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
+          labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
+          laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in
+          voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat
+          non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        </p>
+        <p>&nbsp;</p>
+        <p>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
+          labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
+          laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in
+          voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat
+          non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        </p>
+      </div>
+      <div class="flex w-full max-w-text self-center">
+        <LinkButton href={links.hostExhibition} full>apply</LinkButton>
+      </div>
+    </Container>
+  </Section>
+</BaseLayout>

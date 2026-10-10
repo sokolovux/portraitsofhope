@@ -1,0 +1,76 @@
+---
+import { Image } from "astro:assets";
+import Section from "@/components/Section.astro";
+import Container from "@/components/Container.astro";
+import LinkButton from "@/components/LinkButton.astro";
+import PortraitAge from "@/components/PortraitAge.astro";
+import { getPortraits } from "@/lib/content";
+
+const portraits = await getPortraits();
+---
+
+<Section span={6} class="px-0 sm:px-0 md:px-0">
+  <Container class="items-start">
+    <div class="flex w-full items-start justify-between gap-6 px-4.5 sm:px-6 md:px-9">
+      <div class="flex flex-col items-start gap-6">
+        <h2 class="type-h4">gallery</h2>
+        <p class="type-b1">
+          Faces and stories united in one space. Explore the full collection of portraits.
+        </p>
+      </div>
+      <LinkButton href="/gallery" size="s" class="shrink-0 self-start max-lg:w-auto max-sm:w-auto">
+        view all
+      </LinkButton>
+    </div>
+
+    <div class="marquee w-full overflow-hidden">
+      <div class="marquee-track flex w-max">
+        {
+          [0, 1].map((copy) => (
+            <ul class="flex shrink-0 gap-2.25 pr-2.25" aria-hidden={copy === 1 ? "true" : undefined}>
+              {portraits.map(({ data }) => (
+                <li class="flex shrink-0 flex-col border border-red">
+                  <Image
+                    src={data.image}
+                    alt={copy === 0 ? `Portrait of ${data.name}` : ""}
+                    widths={[204, 256, 384, 512, 768]}
+                    sizes="(min-width: 992px) 384px, (min-width: 768px) 256px, 204px"
+                    class="aspect-[2/3] w-51 border-b border-red object-cover md:w-64 lg:w-96"
+                  />
+                  <div class="flex w-full flex-wrap justify-between gap-3 p-3 max-md:flex-col">
+                    <p class="type-h6">{data.name}</p>
+                    <PortraitAge age={data.age} class="type-b1" />
+                  </div>
+                </li>
+              ))}
+            </ul>
+          ))
+        }
+      </div>
+    </div>
+  </Container>
+</Section>
+
+<style>
+  /* One full list width every 192s, as on the Webflow site; the second copy makes the loop seamless. */
+  @media (prefers-reduced-motion: no-preference) {
+    .marquee-track {
+      animation: poh-marquee 192s linear infinite;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .marquee {
+      overflow-x: auto;
+    }
+    .marquee-track > :nth-child(2) {
+      display: none;
+    }
+  }
+
+  @keyframes poh-marquee {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+</style>

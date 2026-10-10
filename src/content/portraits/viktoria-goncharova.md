@@ -5,5 +5,3 @@ artist: "Elis Femina"
 image: "../../assets/portraits/viktoria-goncharova.jpg"
 order: 20
 ---
-
--
