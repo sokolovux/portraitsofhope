@@ -4,7 +4,7 @@ import Section from "@/components/Section.astro";
 import footerLogo from "@/assets/site/footer-logo.png";
 import { links, site } from "@/data/site";
 
-const instagramClass = "type-b2 font-bold text-ink underline decoration-1 underline-offset-4";
+const linkClass = "type-b2 font-bold text-ink underline decoration-1 underline-offset-4";
 ---
 
 <Section
@@ -19,9 +19,11 @@ const instagramClass = "type-b2 font-bold text-ink underline decoration-1 underl
     sizes="(min-width: 1440px) 1368px, 100vw"
     class="w-full lg:col-span-6"
   />
-  <p class="type-b2 text-ink">{site.email}</p>
   <p class="type-b2">
-    <a href={links.instagram} target="_blank" rel="noopener" class={instagramClass}>
+    <a href={links.contact} class={linkClass}>{site.email}</a>
+  </p>
+  <p class="type-b2">
+    <a href={links.instagram} target="_blank" rel="noopener" class={linkClass}>
       Instagram
     </a>
   </p>

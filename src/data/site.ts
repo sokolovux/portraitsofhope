@@ -25,7 +25,6 @@ export const links = {
     "https://docs.google.com/forms/d/e/1FAIpQLScq-CFS0xG-3KxVeb_M3wXOcQFy1QC64QXK3Koxiil5cwsqgg/viewform",
   instagram: "https://www.instagram.com/portraitsofhope.art",
   coalition: "https://www.instagram.com/peopleforfreerussia",
-  // TODO: decide where "contact" should go; the Webflow site links to "#".
   contact: `mailto:${site.email}`,
   prisonerSource: "https://memopzk.org",
 };
@@ -34,7 +33,6 @@ export type NavItem = { label: string; href: string; external?: boolean; highlig
 
 export const nav: NavItem[] = [
   { label: "Gallery", href: "/gallery" },
-  { label: "contact", href: links.contact },
   { label: "donate", href: links.donate, external: true },
   { label: "host exhibit", href: "/host", highlight: true },
 ];
