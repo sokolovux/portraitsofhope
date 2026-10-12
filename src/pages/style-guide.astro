@@ -44,8 +44,8 @@ const typeScale = [
   { cls: "type-h4", font: "Oswald Bold, uppercase", size: "1.953rem → 2.369rem", leading: "100%", tracking: "-0.04ch", use: "Section titles, page titles", sample: "Featured campaigns" },
   { cls: "type-h6", font: "Oswald Bold, uppercase", size: "1.25rem → 1.333rem", leading: "110%", tracking: "-0.02ch", use: "Names, eyebrows, buttons", sample: "Evgeny Kazantsev" },
   { cls: "type-b1", font: "IBM Plex Serif Regular", size: "1rem", leading: "135%", tracking: "-0.02ch", use: "Body copy", sample: "Portraits of Hope brings together artists and audiences to honor individuals imprisoned for speaking truth, defending freedom or opposing war." },
-  { cls: "type-b2", font: "IBM Plex Serif Regular", size: "0.75rem", leading: "150%", tracking: "0.03ch", use: "Footer text, ages, metadata", sample: "PeopleForFreeRussia@protonmail.com" },
-  { cls: "type-b3", font: "IBM Plex Serif Regular", size: "0.563rem", leading: "175%", tracking: "0.1ch", use: "Captions, sources, portrait bios", sample: "Picture taken in Prague, CZ" },
+  { cls: "type-b2", font: "IBM Plex Serif Regular", size: "0.75rem", leading: "150%", tracking: "0.03ch", use: "Footer text, ages, metadata, portrait bios", sample: "PeopleForFreeRussia@protonmail.com" },
+  { cls: "type-b3", font: "IBM Plex Serif Regular", size: "0.563rem", leading: "175%", tracking: "0.1ch", use: "Captions, sources", sample: "Picture taken in Prague, CZ" },
 ];
 
 const spacing = [
@@ -366,7 +366,7 @@ const inlineCode = "font-mono text-[0.9em] text-paper/80";
     <Container>
       <p class="type-h6 text-red">Portrait card</p>
       <p class={code}>{"<PortraitCard portrait={…} />"}: gallery grid. Age, artist and bio are optional.</p>
-      <ul class="grid w-full grid-cols-1 gap-2.25 md:grid-cols-2 lg:grid-cols-4">
+      <ul class="grid w-full grid-cols-1 gap-2.25 md:grid-cols-2 lg:grid-cols-3">
         {portraits.map((portrait) => <PortraitCard portrait={portrait} />)}
       </ul>
     </Container>

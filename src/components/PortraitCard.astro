@@ -15,7 +15,7 @@ const { Content } = await render(portrait);
     src={image}
     alt={`Portrait of ${name}${artist ? ` by ${artist}` : ""}`}
     widths={[320, 480, 640, 960]}
-    sizes="(min-width: 1440px) 343px, (min-width: 992px) 24vw, (min-width: 768px) 48vw, 100vw"
+    sizes="(min-width: 1440px) 450px, (min-width: 992px) 31vw, (min-width: 768px) 48vw, 100vw"
     loading={eager ? "eager" : "lazy"}
     class="aspect-[3/4] w-full border-b border-red object-cover"
   />
@@ -39,6 +39,6 @@ const { Content } = await render(portrait);
         </p>
       )
     }
-    {portrait.body?.trim() && <div class="type-b3"><Content /></div>}
+    {portrait.body?.trim() && <div class="type-b2"><Content /></div>}
   </div>
 </li>
