@@ -5,7 +5,10 @@ import { nav, site } from "@/data/site";
 const currentPath = Astro.url.pathname.replace(/\/$/, "") || "/";
 ---
 
-<header class="sticky top-0 z-10 mx-auto w-full max-w-site bg-ink">
+<header
+  data-nav
+  class="sticky top-0 z-10 mx-auto w-full max-w-site bg-ink transition-transform duration-300 ease-in-out data-hidden:-translate-y-full motion-reduce:transition-none"
+>
   <div class="relative flex items-center justify-between bg-red px-3 py-1.5 lg:grid lg:grid-cols-6 lg:px-1.5 lg:py-0">
     <a href="/" class="lg:col-span-3" aria-current={currentPath === "/" ? "page" : undefined}>
       <span class="block type-h4 text-ink max-sm:text-[1.5rem]">{site.name}</span>
@@ -32,3 +35,41 @@ const currentPath = Astro.url.pathname.replace(/\/$/, "") || "/";
     <MobileMenu client:media="(width < 62rem)" items={nav} currentPath={currentPath} />
   </div>
 </header>
+
+<script>
+  const header = document.querySelector<HTMLElement>("[data-nav]")!;
+  const THRESHOLD = 8;
+  let lastY = Math.max(0, window.scrollY);
+  let ticking = false;
+
+  const show = () => delete header.dataset.hidden;
+
+  const update = () => {
+    ticking = false;
+    // Clamp iOS overscroll bounce, which reports negative scrollY.
+    const y = Math.max(0, window.scrollY);
+    const menuOpen = header.querySelector('[aria-expanded="true"]');
+
+    if (y < header.offsetHeight || menuOpen) {
+      show();
+      lastY = y;
+      return;
+    }
+    if (Math.abs(y - lastY) < THRESHOLD) return;
+
+    if (y > lastY) header.dataset.hidden = "";
+    else show();
+    lastY = y;
+  };
+
+  window.addEventListener(
+    "scroll",
+    () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(update);
+    },
+    { passive: true },
+  );
+  header.addEventListener("focusin", show);
+</script>

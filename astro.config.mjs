@@ -4,6 +4,7 @@ import { defineConfig } from 'astro/config';
 import react from '@astrojs/react';
 import tailwindcss from '@tailwindcss/vite';
 import sitemap from '@astrojs/sitemap';
+import icon from 'astro-icon';
 
 // https://astro.build/config
 export default defineConfig({
@@ -12,7 +13,7 @@ export default defineConfig({
   build: {
     format: 'file',
   },
-  integrations: [react(), sitemap({ filter: (page) => !page.endsWith('/style-guide') })],
+  integrations: [react(), sitemap({ filter: (page) => !page.endsWith('/style-guide') }), icon()],
 
   vite: {
     plugins: [tailwindcss()]

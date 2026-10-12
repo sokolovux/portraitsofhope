@@ -2,6 +2,8 @@
 import { Image } from "astro:assets";
 import type { CollectionEntry } from "astro:content";
 import { render } from "astro:content";
+import LinkButton from "@/components/LinkButton.astro";
+import Icon from "@/components/Icon.astro";
 
 type Props = { portrait: CollectionEntry<"portraits">; eager?: boolean };
 
@@ -10,7 +12,7 @@ const { name, age, artist, image } = portrait.data;
 const { Content } = await render(portrait);
 ---
 
-<li class="flex flex-col gap-3 border border-red">
+<li class="relative flex flex-col gap-3 border border-red">
   <Image
     src={image}
     alt={`Portrait of ${name}${artist ? ` by ${artist}` : ""}`}
@@ -19,6 +21,18 @@ const { Content } = await render(portrait);
     loading={eager ? "eager" : "lazy"}
     class="aspect-[3/4] w-full border-b border-red object-cover"
   />
+  {/* The button's hover animates `top`, so the wrapper does the positioning. */}
+  <div class="absolute top-3 right-3">
+    <LinkButton
+      href={image.src}
+      download={`${portrait.id}.${image.format}`}
+      variant="secondary"
+      size="icon-s"
+      aria-label={`Download portrait of ${name}`}
+    >
+      <Icon name="download" />
+    </LinkButton>
+  </div>
   <div class="flex flex-col gap-1.5 px-3 pb-3">
     <div class="flex justify-between gap-3">
       <h2 class="type-h6">{name}</h2>

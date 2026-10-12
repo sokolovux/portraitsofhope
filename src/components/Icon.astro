@@ -1,0 +1,17 @@
+---
+import { Icon as AstroIcon } from "astro-icon/components";
+import { cn } from "@/lib/utils";
+
+type Props = {
+  /** Carbon icon name without the set prefix, e.g. "arrow-right". Browse at icon-sets.iconify.design/carbon */
+  name: string;
+  /** Accessible name. Omit for decorative icons next to visible text. */
+  label?: string;
+  class?: string;
+};
+
+const { name, label, class: className } = Astro.props;
+const a11y = label ? { role: "img" as const, "aria-label": label } : { "aria-hidden": "true" as const };
+---
+
+<AstroIcon name={`carbon:${name}`} class={cn("size-5 shrink-0", className)} {...a11y} />

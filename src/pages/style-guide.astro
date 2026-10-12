@@ -11,6 +11,7 @@ import TeamCard from "@/components/TeamCard.astro";
 import Stat from "@/components/home/Stat.astro";
 import CallsToAction from "@/components/home/CallsToAction.astro";
 import GuideHeader from "@/components/style-guide/GuideHeader.astro";
+import Icon from "@/components/Icon.astro";
 import exhibitionPhoto from "@/assets/site/exhibition-prague.jpg";
 import { getCampaigns, getPortraits } from "@/lib/content";
 import { stats, team } from "@/data/site";
@@ -25,6 +26,7 @@ const toc = [
   { id: "layout", label: "Layout" },
   { id: "components", label: "Components" },
   { id: "patterns", label: "Patterns" },
+  { id: "icons", label: "Icons" },
 ];
 
 const colors = [
@@ -77,6 +79,21 @@ const buttons = [
   { variant: "default", size: "s", label: "Donate directly", code: '<LinkButton size="s">' },
   { variant: "secondary", size: "s", label: "read more", code: '<LinkButton variant="secondary" size="s">' },
 ] as const;
+
+const iconButtons = [
+  { variant: "default", size: "icon", icon: "arrow-right", label: "Next", code: '<LinkButton size="icon" aria-label="…">' },
+  { variant: "secondary", size: "icon", icon: "logo-instagram", label: "Instagram", code: '<LinkButton variant="secondary" size="icon">' },
+  { variant: "default", size: "icon-s", icon: "arrow-right", label: "Next", code: '<LinkButton size="icon-s">' },
+  { variant: "secondary", size: "icon-s", icon: "close", label: "Close", code: '<LinkButton variant="secondary" size="icon-s">' },
+] as const;
+
+const icons = ["arrow-right", "arrow-up-right", "launch", "logo-instagram", "email", "favorite", "close", "menu"];
+
+const iconColors = [
+  { cls: "text-red", bg: "bg-ink" },
+  { cls: "text-paper", bg: "bg-ink" },
+  { cls: "text-ink", bg: "bg-red" },
+];
 
 const code = "font-mono text-[0.8125rem] leading-snug text-paper/70";
 const inlineCode = "font-mono text-[0.9em] text-paper/80";
@@ -237,7 +254,8 @@ const inlineCode = "font-mono text-[0.9em] text-paper/80";
   {/* Buttons */}
   <GuideHeader id="buttons" index="03" title="Buttons">
     <p>
-      Two variants and two sizes, all from <code class={inlineCode}>buttonVariants</code> in{" "}
+      Two variants and two sizes, plus square icon buttons in the same two sizes, all from{" "}
+      <code class={inlineCode}>buttonVariants</code> in{" "}
       <code class={inlineCode}>src/components/ui/button.tsx</code>. In Astro, use{" "}
       <code class={inlineCode}>LinkButton</code>; external links open in a new tab automatically.
     </p>
@@ -264,6 +282,43 @@ const inlineCode = "font-mono text-[0.9em] text-paper/80";
       <div class="flex w-full flex-col items-start gap-4.5 pt-3">
         <LinkButton href="#buttons" full>apply</LinkButton>
         <p class={code}>{"<LinkButton full>"}: fills its container, used for page and CTA actions</p>
+      </div>
+    </Container>
+  </Section>
+  <Section span={6}>
+    <Container>
+      <p class="type-h6 text-red">Icon buttons</p>
+      <p class={code}>
+        Square and never full width. icon matches the default text button height; icon-s is a fixed
+        32px. Icon-only, so always pass aria-label.
+      </p>
+      <div class="grid w-full grid-cols-1 gap-9 md:grid-cols-2">
+        {
+          iconButtons.map((button) => (
+            <div class="flex flex-col items-start gap-4.5">
+              <div class="flex items-center gap-3">
+                <LinkButton
+                  href="#buttons"
+                  variant={button.variant}
+                  size={button.size}
+                  aria-label={button.label}
+                  class="self-start"
+                >
+                  <Icon name={button.icon} />
+                </LinkButton>
+                <LinkButton
+                  href="#buttons"
+                  variant={button.variant}
+                  size={button.size === "icon" ? "default" : "s"}
+                  class="self-start max-sm:w-auto max-lg:w-auto"
+                >
+                  {button.label}
+                </LinkButton>
+              </div>
+              <p class={code}>{button.code}</p>
+            </div>
+          ))
+        }
       </div>
     </Container>
   </Section>
@@ -457,6 +512,67 @@ const inlineCode = "font-mono text-[0.9em] text-paper/80";
         Every section and team card carries the red corner square. Ages read as{" "}
         <span class="font-bold">35 Y.O.</span>
       </p>
+    </Container>
+  </Section>
+
+  {/* Icons */}
+  <GuideHeader id="icons" index="07" title="Icons">
+    <p>
+      IBM Carbon, chosen for its square corners and its pairing with IBM Plex. Icons are inlined as SVG
+      at build time and take the current text color. Browse names at{" "}
+      <a href="https://icon-sets.iconify.design/carbon/" target="_blank" rel="noopener" class="text-link">
+        icon-sets.iconify.design/carbon
+      </a>; use the Iconify name with single dashes (<code class={inlineCode}>arrow-right</code>, not
+      Carbon's <code class={inlineCode}>arrow--right</code>).
+    </p>
+    <p>
+      Icons are decorative by default. Pass <code class={inlineCode}>label</code> when an icon stands
+      alone, such as an icon-only link.
+    </p>
+  </GuideHeader>
+  <Section span={6}>
+    <Container>
+      <p class={code}>{'<Icon name="arrow-right" />'}: size-5 (20px) by default, resize with class</p>
+      <ul class="grid w-full grid-cols-2 gap-px border border-red bg-red sm:grid-cols-4 lg:grid-cols-8">
+        {
+          icons.map((name) => (
+            <li class="flex flex-col items-center gap-3 bg-ink p-4.5">
+              <Icon name={name} class="size-8" />
+              <span class={code}>{name}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </Container>
+  </Section>
+  <Section span={3}>
+    <Container>
+      <p class="type-h6 text-red">Color</p>
+      <p class={code}>Set with text-* on the icon or any parent</p>
+      <div class="flex gap-px border border-red bg-red">
+        {
+          iconColors.map((color) => (
+            <div class:list={["flex flex-1 flex-col items-center gap-3 p-4.5", color.bg]}>
+              <Icon name="favorite" class:list={["size-8", color.cls]} />
+              <span class:list={[code, color.bg === "bg-red" && "text-ink"]}>{color.cls}</span>
+            </div>
+          ))
+        }
+      </div>
+    </Container>
+  </Section>
+  <Section span={3}>
+    <Container>
+      <p class="type-h6 text-red">In a button</p>
+      <p class={code}>{'<LinkButton>donate <Icon name="arrow-right" /></LinkButton>'}</p>
+      <div class="flex flex-wrap gap-4.5">
+        <LinkButton href="#icons" class="self-start">
+          donate <Icon name="arrow-right" />
+        </LinkButton>
+        <LinkButton href="#icons" variant="secondary" size="s" class="self-start">
+          instagram <Icon name="arrow-up-right" class="size-4" />
+        </LinkButton>
+      </div>
     </Container>
   </Section>
 </BaseLayout>
