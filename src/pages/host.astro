@@ -1,48 +1,214 @@
 ---
 import { Image } from "astro:assets";
+import { getCollection } from "astro:content";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import Section from "@/components/Section.astro";
 import Container from "@/components/Container.astro";
 import LinkButton from "@/components/LinkButton.astro";
 import exhibitionPhoto from "@/assets/site/exhibition-prague.jpg";
-import { links } from "@/data/site";
+import { links, site, stats } from "@/data/site";
+
+// TODO: placeholder copy written to fill out the page; confirm figures, quotes and logistics with the team.
+
+const portraitCount = (await getCollection("portraits", ({ data }) => !data.draft)).length;
+const exhibitions = stats.find((s) => s.label === "art exhibitions hosted");
+
+const figures = [
+  { value: `${exhibitions?.value ?? 15}${exhibitions?.suffix ?? "+"}`, label: "exhibitions hosted so far" },
+  { value: `${portraitCount}`, label: "portraits ready to print" },
+  { value: "$0", label: "to borrow the collection" },
+];
+
+const provides = [
+  {
+    title: "Print-ready portraits",
+    text: "High-resolution files for every portrait, sized for A3 to A1 and tested on everything from gallery giclée to a library's office printer.",
+  },
+  {
+    title: "Stories & captions",
+    text: "A wall label for each person: who they are, why they were jailed, and what they are facing now. In English, with Russian and other translations on request.",
+  },
+  {
+    title: "An event toolkit",
+    text: "Poster and social templates, a press release, a short talk outline and a donation QR code that sends every gift straight to prisoner support.",
+  },
+];
+
+const steps = [
+  {
+    title: "Tell us about your space",
+    text: "Fill in the short application: where, when, roughly how much wall you have, and who you expect to come.",
+  },
+  {
+    title: "Pick your portraits",
+    text: "We help you choose a selection that fits the room, whether that's six portraits in a café or the full collection in a gallery.",
+  },
+  {
+    title: "Print & hang",
+    text: "You print locally from our files, or we ship a travelling set where one is available. We share a layout guide and labels.",
+  },
+  {
+    title: "Open the doors",
+    text: "Host an opening, a letter-writing evening or a panel. We can connect you with artists, former prisoners and human rights speakers.",
+  },
+];
+
+const venues = [
+  "University halls & student unions",
+  "Galleries & artist-run spaces",
+  "Libraries & community centres",
+  "Cafés, bookshops & bars",
+  "Places of worship",
+  "Festivals, conferences & city halls",
+];
+
 ---
 
 <BaseLayout
   title="Host Exhibit"
-  description="Bring the Portraits of Hope exhibition to your community and help spark awareness, dialogue, and action."
+  description="Bring the Portraits of Hope exhibition to your community. Free to host, ready to print, and every opening turns attention into real support for political prisoners in Russia."
 >
-  <Section span={6}>
-    <Container>
+  <Section span={3}>
+    <Container class="justify-end gap-9">
+      <div class="flex flex-col items-start gap-6">
+        <p class="type-h6 text-red">host an exhibit</p>
+        <h1 class="type-h2">Give them a wall when they've been given a cell</h1>
+        <p class="type-b1">
+          Every person in this collection was locked away so they would be forgotten. When their faces
+          hang in a gallery in Prague, a library in Toronto or a café in Tbilisi, that plan fails. You
+          can make it fail in your city too.
+        </p>
+      </div>
+      <div class="flex w-full max-w-text">
+        <LinkButton href={links.hostExhibition} full>apply to host</LinkButton>
+      </div>
+    </Container>
+  </Section>
+
+  <Section span={3}>
+    <Container class="gap-3">
       <Image
         src={exhibitionPhoto}
         alt="Portraits of Hope exhibition in Prague: framed portraits hung along a gallery wall"
         widths={[480, 720, 1080]}
-        sizes="(min-width: 1440px) 684px, 50vw"
+        sizes="(min-width: 1440px) 648px, (min-width: 992px) 45vw, 100vw"
         loading="eager"
-        class="w-full max-w-1/2 self-center"
+        fetchpriority="high"
+        class="aspect-4/3 w-full flex-1 border border-line object-cover"
       />
-      <h1 class="self-center text-center type-h4">host an exhibit</h1>
-      <div class="rich-text">
-        {/* TODO: placeholder copy carried over from the Webflow page; replace with the real text. */}
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-          labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-          laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in
-          voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat
-          non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-        </p>
-        <p>&nbsp;</p>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-          labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-          laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in
-          voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat
-          non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-        </p>
+      <p class="type-b3">Portraits of Hope in Prague, CZ</p>
+    </Container>
+  </Section>
+
+  {
+    figures.map((f) => (
+      <Section span={2}>
+        <Container class="gap-3">
+          <p class="type-h1 text-red">{f.value}</p>
+          <h2 class="type-h6">{f.label}</h2>
+        </Container>
+      </Section>
+    ))
+  }
+
+  <Section span={3}>
+    <Container>
+      <h2 class="type-h4">why it matters</h2>
+      <p class="type-h3 text-red">Isolation is the punishment. Attention is the antidote.</p>
+    </Container>
+  </Section>
+
+  <Section span={3}>
+    <Container class="gap-4.5">
+      <p class="type-b1">
+        Political prisoners in Russia are held far from home, cut off from family and told that the
+        world has moved on. Lawyers and relatives say the same thing again and again: public attention
+        changes how prisoners are treated. Guards notice when letters arrive by the hundred. Officials
+        notice when a name appears in foreign newspapers.
+      </p>
+      <p class="type-b1">
+        An exhibition is one of the most direct ways to give that attention. Visitors stop, read a
+        story, write a postcard, give what they can. Funds raised at exhibitions have paid for{" "}
+        <span class="red-highlight">medicine, dental care and parcels</span> that prisons refuse to provide.
+      </p>
+    </Container>
+  </Section>
+
+  {
+    provides.map((item, i) => (
+      <Section span={2}>
+        <Container class="gap-4.5">
+          <p class="type-h6 text-red">what you get / {String(i + 1).padStart(2, "0")}</p>
+          <h2 class="type-h4">{item.title}</h2>
+          <p class="type-b1">{item.text}</p>
+        </Container>
+      </Section>
+    ))
+  }
+
+  <Section span={6}>
+    <Container class="gap-9">
+      <div class="flex flex-col items-start gap-6">
+        <h2 class="type-h4">how it works</h2>
+        <p class="type-b1">From first email to opening night in four steps. We're with you the whole way.</p>
       </div>
-      <div class="flex w-full max-w-text self-center">
-        <LinkButton href={links.hostExhibition} full>apply</LinkButton>
+      <ol class="grid w-full gap-9 md:grid-cols-2 lg:grid-cols-4">
+        {
+          steps.map((step, i) => (
+            <li class="flex flex-col items-start gap-3 border-t border-line pt-4.5">
+              <span class="type-h2 text-red" aria-hidden="true">{i + 1}</span>
+              <h3 class="type-h6">{step.title}</h3>
+              <p class="type-b1">{step.text}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </Container>
+  </Section>
+
+  <Section span={3}>
+    <Container>
+      <h2 class="type-h4">who hosts</h2>
+      <p class="type-b1">
+        You don't need to be a gallery. Our exhibitions have been organised by students, librarians,
+        parish volunteers, café owners and diaspora groups. If people gather there, the portraits can
+        hang there.
+      </p>
+      <ul class="flex w-full flex-col">
+        {
+          venues.map((venue) => (
+            <li class="border-b border-line py-3 type-h6 first:border-t">{venue}</li>
+          ))
+        }
+      </ul>
+    </Container>
+  </Section>
+
+  <Section span={3}>
+    <Container class="justify-between gap-9">
+      <p class="type-h1 text-red" aria-hidden="true">“</p>
+      <blockquote class="flex flex-col gap-6">
+        <p class="type-h3">
+          People came for an hour and stayed until we closed. Two students wrote letters to every person
+          on the wall.
+        </p>
+        <footer class="type-b1">
+          <span class="font-bold">Exhibition host</span>, university library, Berlin
+        </footer>
+      </blockquote>
+    </Container>
+  </Section>
+
+  <Section span={6}>
+    <Container class="items-center gap-9 py-9 text-center">
+      <h2 class="type-h2">Bring them to your city</h2>
+      <p class="type-b1">
+        Tell us where and when. We'll reply within a week with next steps and a starter selection of
+        portraits.
+      </p>
+      <div class="flex w-full max-w-text flex-col gap-4.5 sm:flex-row">
+        <LinkButton href={links.hostExhibition} full>apply to host</LinkButton>
+        <LinkButton href={`mailto:${site.email}`} variant="secondary" full>ask a question</LinkButton>
       </div>
     </Container>
   </Section>

@@ -9,7 +9,7 @@ const { campaign } = Astro.props;
 const { name, headline, summary, image, donateUrl } = campaign.data;
 ---
 
-<article class="flex flex-col gap-6 border border-red md:flex-row lg:max-h-[360px]">
+<article class="flex flex-col gap-6 border border-line md:flex-row lg:max-h-[360px]">
   <Image
     src={image}
     alt={`Portrait of ${name}`}

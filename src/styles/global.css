@@ -23,6 +23,8 @@
   --color-paper-shade: #d9d9d9;
   --color-info: #0098b8;
   --color-success: #00a011;
+  /* Grid lines, borders and corner marks across the site. */
+  --color-line: var(--color-red);
   --container-site: 1440px;
   --container-text: 576px;
 }

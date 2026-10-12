@@ -12,14 +12,14 @@ const { name, age, artist, image } = portrait.data;
 const { Content } = await render(portrait);
 ---
 
-<li class="relative flex flex-col gap-3 border border-red">
+<li class="relative flex flex-col gap-3 border border-line">
   <Image
     src={image}
     alt={`Portrait of ${name}${artist ? ` by ${artist}` : ""}`}
     widths={[320, 480, 640, 960]}
     sizes="(min-width: 1440px) 450px, (min-width: 992px) 31vw, (min-width: 768px) 48vw, 100vw"
     loading={eager ? "eager" : "lazy"}
-    class="aspect-[3/4] w-full border-b border-red object-cover"
+    class="aspect-[3/4] w-full border-b border-line object-cover"
   />
   {/* The button's hover animates `top`, so the wrapper does the positioning. */}
   <div class="absolute top-3 right-3">

@@ -29,13 +29,13 @@ const portraits = await getPortraits();
           [0, 1].map((copy) => (
             <ul class="flex shrink-0 gap-2.25 pr-2.25" aria-hidden={copy === 1 ? "true" : undefined}>
               {portraits.map(({ data }) => (
-                <li class="flex shrink-0 flex-col border border-red">
+                <li class="flex shrink-0 flex-col border border-line">
                   <Image
                     src={data.image}
                     alt={copy === 0 ? `Portrait of ${data.name}` : ""}
                     widths={[204, 256, 384, 512, 768]}
                     sizes="(min-width: 992px) 384px, (min-width: 768px) 256px, 204px"
-                    class="aspect-[2/3] w-51 border-b border-red object-cover md:w-64 lg:w-96"
+                    class="aspect-[2/3] w-51 border-b border-line object-cover md:w-64 lg:w-96"
                   />
                   <div class="flex w-full flex-wrap justify-between gap-3 p-3 max-md:flex-col">
                     <p class="type-h6">{data.name}</p>

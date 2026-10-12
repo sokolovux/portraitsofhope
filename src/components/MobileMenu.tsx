@@ -55,7 +55,7 @@ export default function MobileMenu({ items, currentPath }: Props) {
         <div className="overflow-hidden">
           <nav
             aria-label="Main"
-            className="flex flex-col items-center gap-3 border-b border-red bg-ink px-4.5 pt-6 pb-4.5 sm:px-6 sm:pb-6 md:px-9 md:pb-9"
+            className="flex flex-col items-center gap-3 border-b border-line bg-ink px-4.5 pt-6 pb-4.5 sm:px-6 sm:pb-6 md:px-9 md:pb-9"
           >
             {items.map((item) => (
               <a
@@ -64,7 +64,7 @@ export default function MobileMenu({ items, currentPath }: Props) {
                 aria-current={item.href === currentPath ? "page" : undefined}
                 {...(item.external ? { target: "_blank", rel: "noopener" } : {})}
                 className={cn(
-                  "flex w-full items-center justify-center border border-red py-6 font-heading text-[1.33rem] leading-none font-bold tracking-[-0.01rem] uppercase transition-colors duration-200",
+                  "flex w-full items-center justify-center border border-line py-6 font-heading text-[1.33rem] leading-none font-bold tracking-[-0.01rem] uppercase transition-colors duration-200",
                   item.highlight ? "bg-red text-ink hover:bg-red-shade" : "text-paper hover:bg-red hover:text-ink"
                 )}
               >
