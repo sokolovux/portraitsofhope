@@ -30,14 +30,13 @@ export const links = {
   prisonerSource: "https://memopzk.org",
 };
 
-export type NavItem = { label: string; href: string; external?: boolean };
+export type NavItem = { label: string; href: string; external?: boolean; highlight?: boolean };
 
 export const nav: NavItem[] = [
-  { label: "home", href: "/" },
   { label: "Gallery", href: "/gallery" },
   { label: "contact", href: links.contact },
-  { label: "host exhibit", href: "/host" },
   { label: "donate", href: links.donate, external: true },
+  { label: "host exhibit", href: "/host", highlight: true },
 ];
 
 export const stats = [

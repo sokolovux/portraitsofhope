@@ -32,13 +32,13 @@ export default function MobileMenu({ items, currentPath }: Props) {
       >
         <span
           className={cn(
-            "absolute inset-x-0 top-0 h-1 w-8 bg-ink transition-transform duration-300 ease-in-out",
+            "absolute inset-x-0 top-0 h-1 w-8 bg-red transition-transform duration-300 ease-in-out",
             open ? "translate-y-3.5 rotate-45" : "translate-y-1"
           )}
         />
         <span
           className={cn(
-            "absolute inset-x-0 bottom-0 h-1 w-8 bg-ink transition-transform duration-300 ease-in-out",
+            "absolute inset-x-0 bottom-0 h-1 w-8 bg-red transition-transform duration-300 ease-in-out",
             open ? "-translate-y-3.5 -rotate-45" : "-translate-y-1"
           )}
         />
@@ -55,7 +55,7 @@ export default function MobileMenu({ items, currentPath }: Props) {
         <div className="overflow-hidden">
           <nav
             aria-label="Main"
-            className="flex flex-col items-center gap-3 border-b border-ink bg-red px-4.5 pt-6 pb-4.5 sm:px-6 sm:pb-6 md:px-9 md:pb-9"
+            className="flex flex-col items-center gap-3 border-b border-red bg-ink px-4.5 pt-6 pb-4.5 sm:px-6 sm:pb-6 md:px-9 md:pb-9"
           >
             {items.map((item) => (
               <a
@@ -63,7 +63,10 @@ export default function MobileMenu({ items, currentPath }: Props) {
                 href={item.href}
                 aria-current={item.href === currentPath ? "page" : undefined}
                 {...(item.external ? { target: "_blank", rel: "noopener" } : {})}
-                className="flex w-full items-center justify-center border border-ink py-6 font-heading text-[1.33rem] leading-none font-bold tracking-[-0.01rem] text-ink uppercase transition-colors duration-200 hover:bg-ink hover:text-[#f9e8d8]"
+                className={cn(
+                  "flex w-full items-center justify-center border border-red py-6 font-heading text-[1.33rem] leading-none font-bold tracking-[-0.01rem] uppercase transition-colors duration-200",
+                  item.highlight ? "bg-red text-ink hover:bg-red-shade" : "text-paper hover:bg-red hover:text-ink"
+                )}
               >
                 {item.label}
               </a>

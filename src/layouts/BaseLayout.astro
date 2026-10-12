@@ -67,7 +67,7 @@ const ogUrl = new URL(og.src, Astro.site ?? site.url);
       )
     }
     <main
-      class="relative mx-auto flex w-full max-w-site flex-col gap-px overflow-hidden bg-red p-px lg:grid lg:grid-cols-6"
+      class="relative mx-auto flex w-full max-w-site flex-col gap-px overflow-hidden bg-red p-px pt-0 lg:grid lg:grid-cols-6"
     >
       <slot />
       <Footer variant={footer} />
