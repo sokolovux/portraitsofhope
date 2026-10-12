@@ -41,28 +41,47 @@ const currentPath = Astro.url.pathname.replace(/\/$/, "") || "/";
 
 <script>
   const header = document.querySelector<HTMLElement>("[data-nav]")!;
-  const THRESHOLD = 8;
-  let lastY = Math.max(0, window.scrollY);
+  const HIDE_AFTER = 8;
+  // In-app browsers (Telegram, Instagram) report small backwards jumps mid-scroll,
+  // so showing needs a deliberate upward scroll rather than any reversal.
+  const SHOW_AFTER = 50;
+
+  const viewportHeight = () => window.visualViewport?.height ?? window.innerHeight;
+  // Clamp overscroll bounce at both ends, which reports positions outside the page.
+  const scrollY = () =>
+    Math.min(Math.max(0, window.scrollY), document.documentElement.scrollHeight - window.innerHeight);
+
+  let lastY = scrollY();
+  let lastViewport = viewportHeight();
+  let travel = 0;
   let ticking = false;
 
   const show = () => delete header.dataset.hidden;
 
   const update = () => {
     ticking = false;
-    // Clamp iOS overscroll bounce, which reports negative scrollY.
-    const y = Math.max(0, window.scrollY);
-    const menuOpen = header.querySelector('[aria-expanded="true"]');
+    const y = scrollY();
+    const delta = y - lastY;
+    lastY = y;
 
-    if (y < header.offsetHeight || menuOpen) {
-      show();
-      lastY = y;
+    // Browser toolbars collapsing resize the viewport and shift scrollY without the user scrolling.
+    const vh = viewportHeight();
+    if (vh !== lastViewport) {
+      lastViewport = vh;
+      travel = 0;
       return;
     }
-    if (Math.abs(y - lastY) < THRESHOLD) return;
 
-    if (y > lastY) header.dataset.hidden = "";
-    else show();
-    lastY = y;
+    if (y < header.offsetHeight || header.querySelector('[aria-expanded="true"]')) {
+      show();
+      travel = 0;
+      return;
+    }
+    if (delta === 0) return;
+
+    travel = Math.sign(delta) === Math.sign(travel) ? travel + delta : delta;
+    if (travel > HIDE_AFTER) header.dataset.hidden = "";
+    else if (travel < -SHOW_AFTER) show();
   };
 
   window.addEventListener(
