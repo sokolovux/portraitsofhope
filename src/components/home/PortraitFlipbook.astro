@@ -18,8 +18,9 @@ const keyframes = `@keyframes poh-flip { 0% { opacity: 1 } ${100 / frames.length
 
 <Fragment set:html={`<style>${keyframes}</style>`} />
 
-<Section span={2} class="aspect-[6/7.2] md:aspect-[6/7] lg:aspect-[6/6.78]" aria-hidden="true">
-  <div class="relative z-1 h-full w-full" style={`--cycle: ${cycleMs}ms`}>
+<Section span={2} class="aspect-[6/7.2] overflow-hidden md:aspect-[6/7] lg:aspect-[6/6.78]" aria-hidden="true">
+  {/* Matches the 1600×1863 frames. Sizing from the section's aspect-ratio height (h-full) overflowed in iOS Safari. */}
+  <div class="relative z-1 aspect-[1600/1863] w-full" style={`--cycle: ${cycleMs}ms`}>
     {
       frames.map((frame, i) => (
         <Image
@@ -28,7 +29,7 @@ const keyframes = `@keyframes poh-flip { 0% { opacity: 1 } ${100 / frames.length
           widths={[400, 600, 900, 1200]}
           sizes="(min-width: 1440px) 408px, (min-width: 992px) 30vw, 100vw"
           loading={i === 0 ? "eager" : "lazy"}
-          class:list={["frame absolute top-0 left-0 w-full", i === 0 ? "opacity-100" : "opacity-0"]}
+          class:list={["frame absolute inset-0 size-full", i === 0 ? "opacity-100" : "opacity-0"]}
           style={`animation-delay: ${i * FRAME_MS - cycleMs}ms`}
         />
       ))
