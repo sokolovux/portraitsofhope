@@ -65,14 +65,17 @@ const currentPath = Astro.url.pathname.replace(/\/$/, "") || "/";
     lastY = y;
   };
 
-  window.addEventListener(
-    "scroll",
-    () => {
-      if (ticking) return;
-      ticking = true;
-      requestAnimationFrame(update);
-    },
-    { passive: true },
-  );
-  header.addEventListener("focusin", show);
+  // Auto-hide only with a mouse or trackpad. In-app browsers on phones (Telegram) made it flicker.
+  if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+    window.addEventListener(
+      "scroll",
+      () => {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(update);
+      },
+      { passive: true },
+    );
+    header.addEventListener("focusin", show);
+  }
 </script>
