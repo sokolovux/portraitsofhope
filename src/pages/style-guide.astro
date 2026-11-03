@@ -5,6 +5,7 @@ import Section from "@/components/Section.astro";
 import Container from "@/components/Container.astro";
 import LinkButton from "@/components/LinkButton.astro";
 import CampaignCard from "@/components/CampaignCard.astro";
+import Chip from "@/components/Chip.astro";
 import PortraitCard from "@/components/PortraitCard.astro";
 import PortraitAge from "@/components/PortraitAge.astro";
 import TeamCard from "@/components/TeamCard.astro";
@@ -47,8 +48,7 @@ const typeScale = [
   { cls: "type-h4", font: "Oswald Bold, uppercase", size: "1.953rem → 2.369rem", leading: "100%", tracking: "-0.04ch", use: "Section titles, page titles", sample: "Featured campaigns" },
   { cls: "type-h6", font: "Oswald Bold, uppercase", size: "1.25rem → 1.333rem", leading: "110%", tracking: "-0.02ch", use: "Names, eyebrows, buttons", sample: "Evgeny Kazantsev" },
   { cls: "type-b1", font: "IBM Plex Serif Regular", size: "1rem", leading: "135%", tracking: "-0.02ch", use: "Body copy", sample: "Portraits of Hope brings together artists and audiences to honor individuals imprisoned for speaking truth, defending freedom or opposing war." },
-  { cls: "type-b2", font: "IBM Plex Serif Regular", size: "0.75rem", leading: "150%", tracking: "0.03ch", use: "Footer text, ages, metadata, portrait bios", sample: "PeopleForFreeRussia@protonmail.com" },
-  { cls: "type-b3", font: "IBM Plex Serif Regular", size: "0.563rem", leading: "175%", tracking: "0.1ch", use: "Captions, sources", sample: "Picture taken in Prague, CZ" },
+  { cls: "type-b2", font: "IBM Plex Serif Regular", size: "0.75rem", leading: "150%", tracking: "0.03ch", use: "Footer text, ages, metadata, portrait bios, captions, sources", sample: "PeopleForFreeRussia@protonmail.com" },
 ];
 
 const spacing = [
@@ -417,6 +417,17 @@ const inlineCode = "font-mono text-[0.9em] text-paper/80";
       </Section>
     )
   }
+  <Section span={6} id="chip">
+    <Container>
+      <p class="type-h6 text-red">Chip</p>
+      <p class={code}>{"<Chip>label</Chip>"}: a portrait tag. A portrait can have none.</p>
+      <div class="flex flex-wrap gap-1.5">
+        <Chip>Lawyer</Chip>
+        <Chip>Student</Chip>
+        <Chip>Anti-war activist</Chip>
+      </div>
+    </Container>
+  </Section>
   <Section span={6}>
     <Container>
       <p class="type-h6 text-red">Portrait card</p>
@@ -482,7 +493,7 @@ const inlineCode = "font-mono text-[0.9em] text-paper/80";
   <Section span={3}>
     <Container>
       <p class="type-h6 text-red">Bordered image and caption</p>
-      <p class={code}>border border-line, then type-b3 caption</p>
+      <p class={code}>border border-line, then type-b2 caption</p>
       <Image
         src={exhibitionPhoto}
         alt="Portraits of Hope exhibition in Prague: framed portraits hung along a gallery wall"
@@ -490,7 +501,7 @@ const inlineCode = "font-mono text-[0.9em] text-paper/80";
         sizes="(min-width: 1440px) 648px, (min-width: 992px) 45vw, 100vw"
         class="aspect-video w-full border border-line object-cover"
       />
-      <p class="type-b3">Picture taken in Prague, CZ</p>
+      <p class="type-b2">Picture taken in Prague, CZ</p>
     </Container>
   </Section>
   <Section span={3}>

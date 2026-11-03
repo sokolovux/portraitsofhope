@@ -2,17 +2,23 @@
 import { Image } from "astro:assets";
 import type { CollectionEntry } from "astro:content";
 import { render } from "astro:content";
+import Chip from "@/components/Chip.astro";
 import LinkButton from "@/components/LinkButton.astro";
 import Icon from "@/components/Icon.astro";
 
 type Props = { portrait: CollectionEntry<"portraits">; eager?: boolean };
 
 const { portrait, eager = false } = Astro.props;
-const { name, age, artist, image } = portrait.data;
+const { name, age, artist, image, tags = [] } = portrait.data;
 const { Content } = await render(portrait);
 ---
 
-<li class="relative flex flex-col gap-3 border border-line">
+<li
+  class="relative flex flex-col gap-3 border border-line"
+  data-name={name}
+  data-age={age}
+  data-tags={JSON.stringify(tags)}
+>
   <Image
     src={image}
     alt={`Portrait of ${name}${artist ? ` by ${artist}` : ""}`}
@@ -21,6 +27,15 @@ const { Content } = await render(portrait);
     loading={eager ? "eager" : "lazy"}
     class="aspect-[3/4] w-full border-b border-line object-cover"
   />
+  {
+    tags.length > 0 && (
+      <div class="absolute top-3 left-3 flex max-w-[calc(100%-4.5rem)] flex-wrap gap-1.5">
+        {tags.map((tag) => (
+          <Chip>{tag}</Chip>
+        ))}
+      </div>
+    )
+  }
   {/* The button's hover animates `top`, so the wrapper does the positioning. */}
   <div class="absolute top-3 right-3">
     <LinkButton
@@ -38,7 +53,7 @@ const { Content } = await render(portrait);
       <h2 class="type-h6">{name}</h2>
       {
         age !== undefined && (
-          <p class="flex shrink-0 gap-1.5 type-b2">
+          <p class="flex shrink-0 gap-1.5 type-b1">
             <span>{age}</span>
             <span>Y.O</span>
           </p>

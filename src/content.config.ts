@@ -12,6 +12,8 @@ const portraits = defineCollection({
       name: z.string(),
       age: z.number().int().positive().optional(),
       artist: z.string().optional(),
+      /** Labels shown as chips. Omit when a portrait has no tag. */
+      tags: z.array(z.string()).optional(),
       image: image(),
       /** Display order in the gallery and the home page marquee (ascending). */
       order: z.number(),

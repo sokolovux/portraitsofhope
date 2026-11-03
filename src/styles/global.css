@@ -96,7 +96,7 @@
   }
 }
 
-/* Type scale, matching the Webflow h1-h6 / b1-b3 classes. Headings step down below 768px. */
+/* Type scale, matching the Webflow h1-h6 / b1-b2 classes. Headings step down below 768px. */
 @utility type-h1 {
   @apply max-w-text font-heading font-bold uppercase;
   font-size: 3.815rem;
@@ -143,12 +143,6 @@
   font-size: 0.75rem;
   line-height: 150%;
   letter-spacing: 0.03ch;
-}
-@utility type-b3 {
-  @apply max-w-text font-body font-normal;
-  font-size: 0.563rem;
-  line-height: 175%;
-  letter-spacing: 0.1ch;
 }
 
 @layer components {

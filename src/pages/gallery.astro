@@ -4,10 +4,24 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import Section from "@/components/Section.astro";
 import Container from "@/components/Container.astro";
 import PortraitCard from "@/components/PortraitCard.astro";
+import Icon from "@/components/Icon.astro";
 import galleryTitle from "@/assets/site/gallery-title.png";
 import { getPortraits } from "@/lib/content";
 
 const portraits = await getPortraits();
+const byName = (a: (typeof portraits)[number], b: (typeof portraits)[number]) =>
+  a.data.name.localeCompare(b.data.name, "en", { sensitivity: "base" });
+
+portraits.sort(byName);
+
+const tags = [...new Set(portraits.flatMap((portrait) => portrait.data.tags ?? []))].sort((a, b) =>
+  a.localeCompare(b, "en", { sensitivity: "base" }),
+);
+
+const menuButton =
+  "flex w-full cursor-pointer items-center justify-between gap-3 border border-line bg-ink py-3 pr-3 pl-3 font-heading text-base leading-none font-bold tracking-[-0.01rem] text-paper uppercase outline-none transition-colors duration-200 hover:bg-red hover:text-ink";
+const menuItem =
+  "cursor-pointer px-3 py-3 whitespace-nowrap font-heading text-base leading-none font-bold tracking-[-0.01rem] text-paper uppercase transition-colors duration-200 hover:bg-red hover:text-ink aria-selected:bg-red aria-selected:text-ink";
 ---
 
 <BaseLayout
@@ -27,9 +41,171 @@ const portraits = await getPortraits();
           class="w-full"
         />
       </h1>
-      <ul class="mt-6 mb-12 grid w-full grid-cols-1 gap-2.25 md:grid-cols-2 lg:grid-cols-3">
+      <div class="flex w-full flex-wrap items-center gap-3">
+        <div class="relative z-20 min-w-0" data-gallery-sort>
+          <button
+            type="button"
+            aria-haspopup="listbox"
+            aria-expanded="false"
+            aria-controls="gallery-sort-menu"
+            class:list={[menuButton, "min-w-44 sm:min-w-56"]}
+          >
+            <span data-gallery-sort-label class="truncate">A-Z</span>
+            <Icon name="chevron-down" />
+          </button>
+          <ul
+            id="gallery-sort-menu"
+            data-menu
+            role="listbox"
+            aria-label="Sort portraits"
+            hidden
+            class="absolute top-full left-0 w-max min-w-full border-x border-b border-line bg-ink"
+          >
+            <li role="option" data-value="az" aria-selected="true" class={menuItem}>A-Z</li>
+            <li role="option" data-value="za" aria-selected="false" class={menuItem}>Z-A</li>
+            <li role="option" data-value="youngest" aria-selected="false" class={menuItem}>
+              Youngest-Oldest
+            </li>
+            <li role="option" data-value="oldest" aria-selected="false" class={menuItem}>
+              Oldest-Youngest
+            </li>
+          </ul>
+        </div>
+        <div class="relative z-20 min-w-0" data-gallery-tag>
+          <button
+            type="button"
+            aria-haspopup="listbox"
+            aria-expanded="false"
+            aria-controls="gallery-tag-menu"
+            class:list={[menuButton, "min-w-36"]}
+          >
+            <span data-gallery-tag-label class="truncate">All</span>
+            <Icon name="chevron-down" />
+          </button>
+          <ul
+            id="gallery-tag-menu"
+            data-menu
+            role="listbox"
+            aria-label="Filter portraits by tag"
+            hidden
+            class="absolute top-full left-0 w-max min-w-full border-x border-b border-line bg-ink"
+          >
+            <li role="option" data-value="" aria-selected="true" class={menuItem}>All</li>
+            {
+              tags.map((tag) => (
+                <li role="option" data-value={tag} aria-selected="false" class={menuItem}>
+                  {tag}
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+        <p class="ml-auto shrink-0 type-b1" data-gallery-count>
+          {portraits.length} {portraits.length === 1 ? "portrait" : "portraits"}
+        </p>
+      </div>
+      <ul data-gallery class="mb-12 grid w-full grid-cols-1 gap-2.25 md:grid-cols-2 lg:grid-cols-3">
         {portraits.map((portrait, i) => <PortraitCard portrait={portrait} eager={i < 3} />)}
       </ul>
     </Container>
   </Section>
 </BaseLayout>
+
+<script>
+  const list = document.querySelector<HTMLUListElement>("[data-gallery]");
+  const sort = document.querySelector<HTMLElement>("[data-gallery-sort]");
+  const tagFilter = document.querySelector<HTMLElement>("[data-gallery-tag]");
+  const count = document.querySelector<HTMLElement>("[data-gallery-count]");
+
+  if (list && sort && tagFilter && count) {
+    const cards = [...list.children] as HTMLElement[];
+    const nameOf = (card: HTMLElement) => card.dataset.name ?? "";
+    const ageOf = (card: HTMLElement) => (card.dataset.age ? Number(card.dataset.age) : null);
+    const tagsOf = (card: HTMLElement) => {
+      try {
+        const parsed = JSON.parse(card.dataset.tags ?? "[]");
+        return Array.isArray(parsed) ? parsed.map(String) : [];
+      } catch {
+        return [];
+      }
+    };
+    const byName = (a: HTMLElement, b: HTMLElement) =>
+      nameOf(a).localeCompare(nameOf(b), "en", { sensitivity: "base" });
+    const byAge =
+      (direction: 1 | -1) => (a: HTMLElement, b: HTMLElement) => {
+        const ageA = ageOf(a);
+        const ageB = ageOf(b);
+        if (ageA === null && ageB === null) return byName(a, b);
+        if (ageA === null) return 1;
+        if (ageB === null) return -1;
+        return (ageA - ageB) * direction || byName(a, b);
+      };
+    const sorts: Record<string, (a: HTMLElement, b: HTMLElement) => number> = {
+      az: byName,
+      za: (a, b) => byName(b, a),
+      youngest: byAge(1),
+      oldest: byAge(-1),
+    };
+
+    let sortValue = "az";
+    let tagValue = "";
+
+    const controls = [sort, tagFilter];
+    const menuOf = (root: HTMLElement) => root.querySelector<HTMLElement>("[data-menu]");
+    const buttonOf = (root: HTMLElement) => root.querySelector("button");
+
+    const setOpen = (root: HTMLElement, open: boolean) => {
+      buttonOf(root)?.setAttribute("aria-expanded", String(open));
+      const menu = menuOf(root);
+      if (menu) menu.hidden = !open;
+    };
+
+    const apply = () => {
+      const compare = sorts[sortValue] ?? byName;
+      [...cards]
+        .sort(compare)
+        .forEach((card) => {
+          card.hidden = tagValue !== "" && !tagsOf(card).includes(tagValue);
+          list.appendChild(card);
+        });
+      const shown = cards.filter((card) => !card.hidden).length;
+      count.textContent = `${shown} ${shown === 1 ? "portrait" : "portraits"}`;
+    };
+
+    const choose = (root: HTMLElement, value: string) => {
+      if (root === sort) sortValue = value;
+      else tagValue = value;
+      const options = [...(menuOf(root)?.querySelectorAll<HTMLElement>("[data-value]") ?? [])];
+      for (const option of options) {
+        option.setAttribute("aria-selected", String((option.dataset.value ?? "") === value));
+      }
+      const current = options.find((option) => (option.dataset.value ?? "") === value);
+      const label = root.querySelector("[data-gallery-sort-label], [data-gallery-tag-label]");
+      if (current && label) label.textContent = current.textContent;
+      apply();
+      setOpen(root, false);
+    };
+
+    for (const root of controls) {
+      const button = buttonOf(root);
+      const menu = menuOf(root);
+      button?.addEventListener("click", () => {
+        const open = menu?.hidden ?? true;
+        for (const other of controls) if (other !== root) setOpen(other, false);
+        setOpen(root, open);
+      });
+      menu?.querySelectorAll<HTMLElement>("[data-value]").forEach((option) => {
+        option.addEventListener("click", () => choose(root, option.dataset.value ?? ""));
+      });
+    }
+
+    document.addEventListener("click", (event) => {
+      if (!controls.some((root) => root.contains(event.target as Node))) {
+        for (const root of controls) setOpen(root, false);
+      }
+    });
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") for (const root of controls) setOpen(root, false);
+    });
+  }
+</script>
